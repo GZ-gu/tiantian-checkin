@@ -1,0 +1,18 @@
+.DS_Store
+*.pdf
+extract_lion_assets.py
+node_modules/
+dist/
+.env*
+
+# 本地设计过程与历史素材，不参与产品运行或 GitHub Pages 发布。
+AI生成UI/
+IP形象-透明PNG（旧版）/
+UI参考图/
+png素材备份/
+剪辑视频素材/
+动效素材/
+勋章素材svg有损坏不要用/
+校园学习教育图标/
+assets/icons/
+assets/images/
