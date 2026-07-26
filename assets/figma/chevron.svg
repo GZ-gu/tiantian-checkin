@@ -1,42 +1,5 @@
-<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="16" height="16" fill="#1E1E1E"/>
-<g id="UI&#231;&#149;&#140;&#233;&#157;&#162;&#232;&#174;&#190;&#232;&#174;&#161;">
-<path d="M-1347 -784C-1347 -785.105 -1346.1 -786 -1345 -786H5468C5469.1 -786 5470 -785.105 5470 -784V721C5470 722.105 5469.1 723 5468 723H-1345C-1346.1 723 -1347 722.105 -1347 721V-784Z" fill="#444444"/>
-<path d="M-1345 -786V-785H5468V-786V-787H-1345V-786ZM5470 -784H5469V721H5470H5471V-784H5470ZM5468 723V722H-1345V723V724H5468V723ZM-1347 721H-1346V-784H-1347H-1348V721H-1347ZM-1345 723V722C-1345.55 722 -1346 721.552 -1346 721H-1347H-1348C-1348 722.657 -1346.66 724 -1345 724V723ZM5470 721H5469C5469 721.552 5468.55 722 5468 722V723V724C5469.66 724 5471 722.657 5471 721H5470ZM5468 -786V-785C5468.55 -785 5469 -784.552 5469 -784H5470H5471C5471 -785.657 5469.66 -787 5468 -787V-786ZM-1345 -786V-787C-1346.66 -787 -1348 -785.657 -1348 -784H-1347H-1346C-1346 -784.552 -1345.55 -785 -1345 -785V-786Z" fill="white" fill-opacity="0.1"/>
-<g id="&#230;&#137;&#147;&#229;&#141;&#161;&#233;&#166;&#150;&#233;&#161;&#181;">
-<rect width="393" height="851" transform="translate(-334 -518)" fill="#F4F5F7"/>
-<g id="Frame 177">
-<g id="Frame 176">
-<g id="Frame 175">
-<g id="Card / Task / Completed" filter="url(#filter0_d_106_71)">
-<path d="M-316 -140C-316 -148.837 -308.837 -156 -300 -156H25C33.8365 -156 41 -148.837 41 -140V26C41 34.8365 33.8365 42 25 42H-300C-308.837 42 -316 34.8366 -316 26V-140Z" fill="white"/>
-<g id="Frame 173">
-<g id="Frame 50">
-<path d="M-300 -2C-300 -6.41828 -296.418 -10 -292 -10H17C21.4183 -10 25 -6.41828 25 -2V18C25 22.4183 21.4183 26 17 26H-292C-296.418 26 -300 22.4183 -300 18V-2Z" fill="#77CC2E" fill-opacity="0.12"/>
-<g id="Task Footer / Completed">
-<g id="Task History / Completed">
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="Down (&#228;&#184;&#139;)">
-<path id="Vector" d="M6 4L10 8L6 12" stroke="#6B7280" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector" d="M12 6L8 10L4 6" stroke="#6B7280" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
-<defs>
-<filter id="filter0_d_106_71" x="-326" y="-164" width="377" height="218" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-<feOffset dy="2"/>
-<feGaussianBlur stdDeviation="5"/>
-<feColorMatrix type="matrix" values="0 0 0 0 0.121569 0 0 0 0 0.137255 0 0 0 0 0.160784 0 0 0 0.08 0"/>
-<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_106_71"/>
-<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_106_71" result="shape"/>
-</filter>
-</defs>
 </svg>

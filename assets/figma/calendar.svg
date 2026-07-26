@@ -1,50 +1,12 @@
-<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="12" height="12" fill="#1E1E1E"/>
-<g id="UI&#231;&#149;&#140;&#233;&#157;&#162;&#232;&#174;&#190;&#232;&#174;&#161;">
-<path d="M-1047 -672C-1047 -673.105 -1046.1 -674 -1045 -674H5768C5769.1 -674 5770 -673.105 5770 -672V833C5770 834.105 5769.1 835 5768 835H-1045C-1046.1 835 -1047 834.105 -1047 833V-672Z" fill="#444444"/>
-<path d="M-1045 -674V-673H5768V-674V-675H-1045V-674ZM5770 -672H5769V833H5770H5771V-672H5770ZM5768 835V834H-1045V835V836H5768V835ZM-1047 833H-1046V-672H-1047H-1048V833H-1047ZM-1045 835V834C-1045.55 834 -1046 833.552 -1046 833H-1047H-1048C-1048 834.657 -1046.66 836 -1045 836V835ZM5770 833H5769C5769 833.552 5768.55 834 5768 834V835V836C5769.66 836 5771 834.657 5771 833H5770ZM5768 -674V-673C5768.55 -673 5769 -672.552 5769 -672H5770H5771C5771 -673.657 5769.66 -675 5768 -675V-674ZM-1045 -674V-675C-1046.66 -675 -1048 -673.657 -1048 -672H-1047H-1046C-1046 -672.552 -1045.55 -673 -1045 -673V-674Z" fill="white" fill-opacity="0.1"/>
-<g id="&#230;&#137;&#147;&#229;&#141;&#161;&#233;&#166;&#150;&#233;&#161;&#181;">
-<rect width="393" height="851" transform="translate(-34 -406)" fill="#F4F5F7"/>
-<g id="Frame 177">
-<g id="Frame 176">
-<g id="Frame 175">
-<g id="Card / Task / Completed" filter="url(#filter0_d_106_71)">
-<path d="M-16 -28C-16 -36.8366 -8.83656 -44 0 -44H325C333.837 -44 341 -36.8366 341 -28V138C341 146.837 333.837 154 325 154H-9.53674e-07C-8.83656 154 -16 146.837 -16 138V-28Z" fill="white"/>
-<g id="Frame 173">
-<g id="Frame 172">
-<g id="Task Meta Row / Completed">
-<g id="Task Meta / Publish Date / Completed">
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="Calendar (&#230;&#151;&#165;&#229;&#142;&#134;)">
-<g id="Vector">
-<path d="M10.25 5.25H1.75V10H10.25V5.25ZM11.25 10C11.25 10.5523 10.8023 11 10.25 11H1.75C1.19772 11 0.75 10.5523 0.75 10V4.25H11.25V10Z" fill="#6B7280"/>
-<path d="M1.75 2.25V4.25H10.25V2.25H1.75ZM11.25 5.25H0.75V2.25C0.75 1.69772 1.19772 1.25 1.75 1.25H10.25C10.8023 1.25 11.25 1.69772 11.25 2.25V5.25Z" fill="#6B7280"/>
-<path d="M3.5 0.5H4.5V3.5H3.5V0.5Z" fill="#6B7280"/>
-<path d="M7.5 0.5H8.5V3.5H7.5V0.5Z" fill="#6B7280"/>
-<path d="M9 8V9H6.5V8H9Z" fill="#6B7280"/>
-<path d="M5.5 8V9H3V8H5.5Z" fill="#6B7280"/>
-<path d="M9 6V7H6.5V6H9Z" fill="#6B7280"/>
-<path d="M5.5 6V7H3V6H5.5Z" fill="#6B7280"/>
+<path id="Vector" d="M1.25 4.75H10.75V10C10.75 10.2761 10.5262 10.5 10.25 10.5H1.75C1.47386 10.5 1.25 10.2761 1.25 10V4.75Z" stroke="#4B4F4E"/>
+<path id="Vector_2" d="M1.25 2.25C1.25 1.97386 1.47386 1.75 1.75 1.75H10.25C10.5262 1.75 10.75 1.97386 10.75 2.25V4.75H1.25V2.25Z" stroke="#4B4F4E"/>
+<path id="Vector_3" d="M4 1V3" stroke="#4B4F4E" stroke-linecap="square"/>
+<path id="Vector_4" d="M8 1V3" stroke="#4B4F4E" stroke-linecap="square"/>
+<path id="Vector_5" d="M7 8.5H8.5" stroke="#4B4F4E" stroke-linecap="square"/>
+<path id="Vector_6" d="M3.5 8.5H5" stroke="#4B4F4E" stroke-linecap="square"/>
+<path id="Vector_7" d="M7 6.5H8.5" stroke="#4B4F4E" stroke-linecap="square"/>
+<path id="Vector_8" d="M3.5 6.5H5" stroke="#4B4F4E" stroke-linecap="square"/>
 </g>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
-<defs>
-<filter id="filter0_d_106_71" x="-26" y="-52" width="377" height="218" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-<feOffset dy="2"/>
-<feGaussianBlur stdDeviation="5"/>
-<feColorMatrix type="matrix" values="0 0 0 0 0.121569 0 0 0 0 0.137255 0 0 0 0 0.160784 0 0 0 0.08 0"/>
-<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_106_71"/>
-<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_106_71" result="shape"/>
-</filter>
-</defs>
 </svg>

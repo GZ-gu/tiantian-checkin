@@ -22,7 +22,7 @@ import {
   getTaskTimeline,
   localDateISO,
   seedDemoState
-} from "./core.mjs?v=1.2.2";
+} from "./core.mjs?v=1.2.3";
 
 const STORAGE_KEY = "tiantian-checkin-v1.2-production";
 const A = "./assets/figma";
@@ -121,7 +121,7 @@ function icon(src, alt = "", className = "") {
 function statusBar() {
   const now = new Date();
   const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}`;
-  return `<div class="status-bar" aria-hidden="true"><time>${time}</time><div class="status-icons"><i class="signal"><b></b><b></b><b></b><b></b></i><i class="wifi"></i><i class="battery"><b></b></i></div></div>`;
+  return `<div class="status-bar" aria-hidden="true"><time>${time}</time><div class="status-icons"><i class="signal">${[1, 2, 3, 4].map((index) => icon(`${A}/status-signal-${index}.svg`)).join("")}</i><i class="wifi">${[1, 2, 3].map((index) => icon(`${A}/status-wifi-${index}.svg`)).join("")}</i><i class="battery">${icon(`${A}/status-battery-border.svg`)}<b></b>${icon(`${A}/status-battery-cap.svg`)}</i></div></div>`;
 }
 
 function pageHeader(title, backView = "today", className = "") {
@@ -147,16 +147,20 @@ function medalMarkup(milestone, fill, className = "") {
 
 function navMarkup(active) {
   const items = [
-    ["today", `${A}/nav-home.svg`, "天天打卡"],
-    ["publish", `${A}/nav-publish.svg`, "发布任务"],
-    ["badges", `${A}/nav-badge.svg`, "我的勋章"]
+    ["today", "home", "天天打卡"],
+    ["publish", "publish", "发布任务"],
+    ["badges", "badge", "我的勋章"]
   ];
-  return `<nav class="bottom-nav" aria-label="主导航">${items.map(([view, src, label]) => `<button type="button" class="nav-button ${active === view ? "active" : ""}" data-view="${view}">${icon(src)}<span>${label}</span></button>`).join("")}</nav>`;
+  return `<nav class="bottom-nav" aria-label="主导航">${items.map(([view, asset, label]) => {
+    const selected = active === view;
+    return `<button type="button" class="nav-button ${selected ? "active" : ""}" data-view="${view}">${icon(`${A}/nav-${asset}-${selected ? "active" : "inactive"}.svg`)}<span>${label}</span></button>`;
+  }).join("")}</nav>`;
 }
 
 function render() {
   modalRoot.innerHTML = "";
   if (ui.success) {
+    toastRoot.innerHTML = "";
     app.innerHTML = renderSuccess();
     return;
   }
@@ -184,7 +188,7 @@ function updateClock() {
 
 function renderHomeHero() {
   const stats = calculateGlobalStats(state);
-  return `<header class="home-hero">${statusBar()}<div class="hero-art">${icon(`${A}/lion-home.png`, "小狮子")}</div><div class="hero-copy"><h1>你好，${escapeHtml(state.profile.nickname)}！</h1><div class="day-chip">进步第 <strong>${stats.cumulativeLabel}</strong> 天</div><p>每天进步一点点，攒成孩子看得到的小勋章。</p></div></header>`;
+  return `<header class="home-hero">${icon(`${A}/home-wave.svg`, "", "hero-wave")}${icon(`${A}/spark-dot-lg.svg`, "", "spark spark-dot-lg")}${icon(`${A}/spark-dot-sm.svg`, "", "spark spark-dot-sm")}${icon(`${A}/spark-star-lg.svg`, "", "spark spark-star-lg")}${icon(`${A}/spark-star-sm.svg`, "", "spark spark-star-sm")}${statusBar()}<div class="hero-art">${icon(`${A}/lion-home.png`, "小狮子")}</div><div class="hero-copy"><h1>你好，${escapeHtml(state.profile.nickname)}！</h1><div class="day-chip">进步第 <strong>${stats.cumulativeLabel}</strong> 天${icon(`${A}/bolt.svg`)}</div><p>每天进步一点点，攒成孩子看得到的小勋章。</p></div></header>`;
 }
 
 function getWeekDates(selectedDate = ui.selectedDate) {
@@ -197,7 +201,7 @@ function getWeekDates(selectedDate = ui.selectedDate) {
   });
 }
 
-function renderGrowthCard() {
+function renderGrowthCard(emptyState = false) {
   const today = localDateISO();
   const completedDates = new Set(state.checkIns.filter((item) => item.status === "active").map((item) => item.date));
   const days = getWeekDates().map((iso) => {
@@ -207,9 +211,13 @@ function renderGrowthCard() {
     const completed = completedDates.has(iso);
     const stateClass = completed ? "done" : todayDate ? "today" : iso < today ? "past" : "future";
     const symbol = completed ? icon(`${A}/check.svg`) : todayDate ? icon(`${A}/day-lion.svg`) : "";
-    return `<button type="button" class="day-node ${stateClass} ${selected ? "selected" : ""}" data-action="select-date" data-date="${iso}" aria-label="${formatDate(iso)}"><span>周${"日一二三四五六"[date.getDay()]}</span><i>${symbol}</i><b>${String(date.getDate()).padStart(2, "0")}</b></button>`;
+    const weekday = `周${"日一二三四五六"[date.getDay()]}`;
+    const day = String(date.getDate()).padStart(2, "0");
+    const top = emptyState ? day : weekday;
+    const bottom = emptyState ? (todayDate ? "今天" : weekday) : day;
+    return `<button type="button" class="day-node ${stateClass} ${selected ? "selected" : ""}" data-action="select-date" data-date="${iso}" aria-label="${formatDate(iso)}"><span>${top}</span><i>${symbol}</i><b>${bottom}</b></button>`;
   }).join("");
-  return `<section class="growth-card ${ui.growthExpanded ? "expanded" : ""}"><div class="growth-header"><strong>本周成长轨迹</strong><button class="expand-button" type="button" data-action="toggle-growth"><span>${ui.growthExpanded ? "收起" : "展开"}</span>${icon(`${A}/down.svg`, "", ui.growthExpanded ? "rotated" : "")}</button></div><div class="week-grid">${days}</div>${ui.growthExpanded ? renderMonthCalendar() : ""}</section>`;
+  return `<section class="growth-card ${emptyState ? "empty-growth" : ""} ${ui.growthExpanded ? "expanded" : ""}"><div class="growth-header"><strong>本周成长轨迹</strong><button class="expand-button" type="button" data-action="toggle-growth"><span>${ui.growthExpanded ? "收起" : "展开"}</span>${icon(`${A}/down.svg`, "", ui.growthExpanded ? "rotated" : "")}</button></div><div class="week-grid">${days}</div>${ui.growthExpanded ? renderMonthCalendar() : ""}</section>`;
 }
 
 function renderMonthCalendar() {
@@ -232,12 +240,13 @@ function renderToday() {
   const tasks = getTasksForDate(state, ui.selectedDate).filter((task) => ["active", "completed"].includes(task.status));
   const today = localDateISO();
   const title = ui.selectedDate === today ? "今日任务" : `${new Date(`${ui.selectedDate}T12:00:00`).getMonth() + 1}月${new Date(`${ui.selectedDate}T12:00:00`).getDate()}日任务`;
-  return `<section class="screen home-screen">${renderHomeHero()}${renderGrowthCard()}<div class="section-heading"><h2>${title} <small>（${tasks.length ? `${tasks.length}项` : "未发布"}）</small></h2><time>${formatDate(ui.selectedDate, true)} ${weekdayText(ui.selectedDate)}</time></div>${tasks.length ? `<div class="task-list">${tasks.map((task) => renderTaskCard(task, ui.selectedDate)).join("")}</div>` : renderEmptyTask()}${navMarkup("today")}</section>`;
+  const emptyState = tasks.length === 0;
+  return `<section class="screen home-screen ${emptyState ? "is-empty" : "has-tasks"}">${renderHomeHero()}${renderGrowthCard(emptyState)}<div class="section-heading"><h2>${title} <small>（${tasks.length ? `${tasks.length}项` : "未发布"}）</small></h2><time>${formatDate(ui.selectedDate, true)} ${weekdayText(ui.selectedDate)}</time></div>${tasks.length ? `<div class="task-list">${tasks.map((task) => renderTaskCard(task, ui.selectedDate)).join("")}</div>` : renderEmptyTask()}${navMarkup("today")}</section>`;
 }
 
 function renderEmptyTask() {
   const isToday = ui.selectedDate === localDateISO();
-  return `<article class="empty-task-card"><div class="empty-task-copy">${icon(`${A}/lion-empty.png`, "小狮子")}<div><strong>${isToday ? "发布一个新任务试试吧" : "这一天还没有任务"}</strong><p>${isToday ? "把想坚持的事，变成看得见的成长。" : "选择其他日期查看，或回到今天新建任务。"}</p></div></div>${isToday ? `<button class="primary-button compact" type="button" data-view="publish">${icon(`${A}/add.svg`)}<span>新建任务</span></button>` : ""}</article>`;
+  return `<article class="empty-task-card"><div class="empty-task-copy">${icon(`${A}/lion-empty.png`, "小狮子")}<div><strong>${isToday ? "发布一个新任务试试吧" : "这一天还没有任务"}</strong>${isToday ? `<div class="empty-task-meta"><span>${icon(`${A}/calendar.svg`)}未发布</span><span>${icon(`${A}/target.svg`)}目标0天</span><span>${icon(`${A}/gift.svg`)}未设置奖励</span></div>` : `<p>选择其他日期查看，或回到今天新建任务。</p>`}</div></div>${isToday ? `<button class="primary-button compact" type="button" data-view="publish">${icon(`${A}/add.svg`)}<span>新建任务</span></button>` : ""}</article>`;
 }
 
 function renderMeta(task) {
@@ -257,7 +266,10 @@ function renderTaskCard(task, date) {
   else if (status === "missed") action = `<button class="checkin-button makeup" type="button" data-action="makeup" data-task-id="${task.id}" data-date="${date}">补卡</button>`;
   else if (checked) action = `<span class="completed-label">${icon(`${A}/success.svg`)}已完成打卡</span>`;
   else action = `<span class="future-label">尚未到打卡时间</span>`;
-  return `<article class="task-card"><div class="task-top"><h3>${escapeHtml(task.title)}</h3>${checked ? `<span class="status-check">${icon(`${A}/check.svg`)}</span>` : ""}</div>${renderMeta(task)}<div class="task-progress">${medalMarkup(progress, progress.fill)}<div class="progress-copy"><strong>${progress.name}（${progress.segmentDone}/${progress.segmentTarget}）</strong><div class="segment-bar">${segments}</div></div><button class="share-link" type="button" data-action="share" data-task-id="${task.id}">${icon(`${A}/share.svg`)}<span>分享</span></button></div><div class="task-footer ${checked ? "completed" : ""}"><button class="history-link" type="button" data-action="records" data-task-id="${task.id}">${checked ? `${icon(`${A}/success.svg`)}<span>已完成打卡</span>` : "<span>查看打卡记录</span>"}</button>${action}</div></article>`;
+  const footer = checked && !completed
+    ? `<span class="completed-indicator">${icon(`${A}/success.svg`)}<span>已完成打卡</span></span><button class="history-link history-link-right" type="button" data-action="records" data-task-id="${task.id}"><span>查看打卡记录</span>${icon(`${A}/chevron.svg`)}</button>`
+    : `<button class="history-link" type="button" data-action="records" data-task-id="${task.id}"><span>查看打卡记录</span>${icon(`${A}/chevron.svg`)}</button>${action}`;
+  return `<article class="task-card"><div class="task-top"><h3>${escapeHtml(task.title)}</h3>${checked ? `<span class="status-check">${icon(`${A}/check.svg`)}</span>` : ""}</div>${renderMeta(task)}<div class="task-progress">${medalMarkup(progress, progress.fill)}<div class="progress-copy"><strong>${progress.name}（${progress.segmentDone}/${progress.segmentTarget}）</strong><div class="segment-bar">${segments}</div></div><button class="share-link" type="button" data-action="share" data-task-id="${task.id}">${icon(`${A}/share.svg`)}<span>分享</span></button></div><div class="task-footer ${checked ? "completed" : ""}">${footer}</div></article>`;
 }
 
 function renderPublishHero(taskCount) {
@@ -297,7 +309,7 @@ function milestoneSummary(milestone) {
 
 function renderBadges() {
   const stats = calculateGlobalStats(state);
-  return `<section class="screen badges-screen"><header class="badges-hero">${statusBar()}<button class="profile-link" type="button" data-view="profile">${icon(`${A}/profile-avatar.png`, "头像")}<span><strong>${escapeHtml(state.profile.nickname)}</strong><small>${icon(`${A}/edit-name.svg`)}编辑信息</small></span></button>${icon(`${A}/lion-badges.png`, "小狮子", "badges-lion")}</header><div class="badge-stats"><div><span>坚持打卡</span><strong>${stats.cumulativeLabel}<small> 天</small></strong></div><div><span>完成任务</span><strong>${state.tasks.filter((task) => ["completed", "archived"].includes(task.status)).length}<small> 个</small></strong></div><div><span>获得勋章</span><strong>${totalUnlockedBadges(state)}<small> 枚</small></strong></div></div><h2 class="medal-wall-title">勋章墙</h2><div class="medal-list">${MILESTONES.map((milestone) => { const summary = milestoneSummary(milestone); return `<article class="medal-card">${medalMarkup(milestone, summary.fill)}<div><h3>${milestone.name}<button type="button" aria-label="查看勋章详情">${icon(`${A}/chevron.svg`)}</button></h3><p>累计获得 <strong>${summary.earned}</strong> 次</p></div></article>`; }).join("")}</div>${navMarkup("badges")}</section>`;
+  return `<section class="screen badges-screen"><header class="badges-hero">${icon(`${A}/home-wave.svg`, "", "badges-wave")}${statusBar()}<button class="profile-link" type="button" data-view="profile">${icon(`${A}/profile-avatar.png`, "头像")}<span><strong>${escapeHtml(state.profile.nickname)}</strong><small>${icon(`${A}/edit-name.svg`)}编辑信息</small></span></button>${icon(`${A}/lion-badges.png`, "小狮子", "badges-lion")}</header><div class="badge-stats"><div><span>坚持打卡</span><strong>${stats.cumulativeLabel}<small> 天</small></strong></div><div><span>完成任务</span><strong>${state.tasks.filter((task) => ["completed", "archived"].includes(task.status)).length}<small> 个</small></strong></div><div><span>获得勋章</span><strong>${totalUnlockedBadges(state)}<small> 枚</small></strong></div></div><h2 class="medal-wall-title">勋章墙</h2><div class="medal-list">${MILESTONES.map((milestone) => { const summary = milestoneSummary(milestone); return `<article class="medal-card">${medalMarkup(milestone, summary.fill)}<div><h3>${milestone.name}勋章<button type="button" aria-label="查看勋章详情">${icon(`${A}/chevron.svg`)}</button></h3><p>累计获得 <strong>${summary.earned}</strong> 次</p></div></article>`; }).join("")}</div>${navMarkup("badges")}</section>`;
 }
 
 function renderProfile() {
@@ -341,7 +353,7 @@ function renderSuccess() {
   const milestone = ui.success.milestone || progress;
   const isMilestone = Boolean(ui.success.milestone);
   const count = countTaskCheckIns(state, task.id);
-  return `<section class="success-screen">${statusBar()}<button class="success-close" type="button" data-action="close-success" aria-label="返回">${icon(`${A}/back.svg`)}</button><div class="success-heading">${icon(`${A}/lion-home.png`, "小狮子")}<div><h1>打卡成功！</h1><p>今天的努力已经记录下来了</p></div></div><div class="celebration">${icon(`${A}/confetti.svg`, "", "confetti")}<div class="success-medal-ring">${medalMarkup(milestone, isMilestone ? 1 : progress.fill, "success-medal")}</div></div><article class="success-progress"><h2>${milestone.name}</h2><p>勋章注入 <strong>${progress.completedDays}</strong> 格 · 当前 ${progress.segmentDone}/${progress.segmentTarget}</p><div class="success-bar"><i style="width:${Math.round(progress.fill * 100)}%"></i></div><span>${isMilestone ? `恭喜你，成功获得${milestone.name}！` : `再完成 ${Math.max(progress.segmentTarget - progress.segmentDone, 0)} 天即可点亮勋章`}</span></article><div class="success-stats"><div><span>连续坚持</span><strong>${calculateGlobalStats(state).streakDays}<small> 天</small></strong></div><div><span>本周完成</span><strong>${getWeekDates().filter((date) => state.checkIns.some((item) => item.status === "active" && item.date === date && item.taskId === task.id)).length}<small> 天</small></strong></div><div><span>距离目标</span><strong>${Math.max(task.targetDays - count, 0)}<small> 天</small></strong></div></div>${ui.success.final ? `<button class="primary-button success-next" type="button" data-action="open-reward" data-task-id="${task.id}">回应约定奖励</button>` : `<button class="primary-button success-next" type="button" data-action="share" data-task-id="${task.id}">${icon(`${A}/share.svg`)}<span>生成分享卡</span></button>`}<button class="plain-button" type="button" data-action="close-success">返回今日任务</button></section>`;
+  return `<section class="success-screen">${statusBar()}<button class="success-close" type="button" data-action="close-success" aria-label="返回">${icon(`${A}/back.svg`)}</button><div class="success-heading">${icon(`${A}/lion-success.png`, "小狮子")}<div><h1>打卡成功！</h1><p>今天的努力已经记录下来了</p></div></div><div class="celebration"><i class="confetti-dot blue"></i><i class="confetti-dot orange"></i><i class="confetti-dot mint"></i><i class="confetti-dot pink"></i><i class="confetti-dot yellow"></i><i class="confetti-star"></i><div class="success-medal-ring">${medalMarkup(milestone, isMilestone ? 1 : progress.fill, "success-medal")}</div></div><article class="success-progress"><h2>${milestone.name}</h2><p>勋章注入 <strong>${progress.completedDays}</strong> 格 · 当前 ${progress.segmentDone}/${progress.segmentTarget}</p><div class="success-bar"><i style="width:${Math.round(progress.fill * 100)}%"></i></div><span>${isMilestone ? `恭喜你，成功获得${milestone.name}！` : `再完成 ${Math.max(progress.segmentTarget - progress.segmentDone, 0)} 天即可点亮勋章`}</span></article><div class="success-stats"><div><span class="success-stat-icon green">${icon(`${A}/success-stat-streak.svg`)}</span><span>连续坚持</span><strong>${calculateGlobalStats(state).streakDays}<small> 天</small></strong></div><div><span class="success-stat-icon teal">${icon(`${A}/success-stat-week.svg`)}</span><span>本周完成</span><strong>${getWeekDates().filter((date) => state.checkIns.some((item) => item.status === "active" && item.date === date && item.taskId === task.id)).length}<small> 天</small></strong></div><div><span class="success-stat-icon yellow">${icon(`${A}/success-stat-target.svg`)}</span><span>距离目标</span><strong>${Math.max(task.targetDays - count, 0)}<small> 天</small></strong></div></div>${ui.success.final ? `<button class="primary-button success-next" type="button" data-action="open-reward" data-task-id="${task.id}">回应约定奖励</button>` : `<button class="primary-button success-next" type="button" data-action="share" data-task-id="${task.id}">${icon(`${A}/share.svg`)}<span>生成分享卡</span></button>`}<button class="plain-button success-return" type="button" data-action="close-success">返回今日任务</button></section>`;
 }
 
 function renderReward() {
@@ -351,7 +363,7 @@ function renderReward() {
     return renderToday();
   }
   const milestone = getMilestonesForTask(task).at(-1);
-  return `<section class="reward-screen">${statusBar()}<button class="reward-close" type="button" data-view="today" aria-label="关闭">${icon(`${A}/close.svg`)}</button><div class="reward-celebration">${icon(`${A}/confetti.svg`, "", "confetti")}${medalMarkup(milestone, 1, "reward-medal")}<span>${task.targetDays}天里程碑</span><h1>恭喜你打成目标！</h1><p>连续完成 ${task.targetDays} 天，每一次坚持都算数</p></div><main class="reward-body"><article class="reward-card"><div class="reward-heading"><span>${icon(`${A}/gift.svg`)}</span><div><small>家长约定奖励</small><strong>${escapeHtml(task.rewardText || "一次认真表扬")}</strong></div></div><div class="reward-note"><strong>家长，请认真回应孩子的这次坚持</strong><p>奖励不是交换，是让努力被看见</p></div></article><button class="primary-button" type="button" data-action="redeem" data-task-id="${task.id}">${icon(`${A}/reward-success.svg`)}<span>确认奖励已兑现</span></button><button class="primary-button" type="button" data-action="share" data-task-id="${task.id}">${icon(`${A}/share.svg`)}<span>生成分享卡</span></button><button class="plain-button" type="button" data-view="today">稍后处理</button></main></section>`;
+  return `<section class="reward-screen">${statusBar()}<button class="reward-close" type="button" data-view="today" aria-label="关闭">${icon(`${A}/close.svg`)}</button><div class="reward-celebration"><i class="reward-confetti one"></i><i class="reward-confetti two"></i><i class="reward-confetti three"></i><i class="reward-confetti four"></i>${medalMarkup(milestone, 1, "reward-medal")}<span>${task.targetDays}天里程碑</span><h1>恭喜你打成目标！</h1><p>连续完成 ${task.targetDays} 天，每一次坚持都算数</p></div><main class="reward-body"><article class="reward-card"><div class="reward-heading"><span>${icon(`${A}/gift.svg`)}</span><div><small>家长约定奖励</small><strong>${escapeHtml(task.rewardText || "一次认真表扬")}</strong></div></div><div class="reward-note"><strong>家长，请认真回应孩子的这次坚持</strong><p>奖励不是交换，是让努力被看见</p></div></article><button class="primary-button" type="button" data-action="redeem" data-task-id="${task.id}">${icon(`${A}/reward-success.svg`)}<span>确认奖励已兑现</span></button><button class="primary-button" type="button" data-action="share" data-task-id="${task.id}">${icon(`${A}/share.svg`)}<span>生成分享卡</span></button><button class="plain-button" type="button" data-view="today">稍后处理</button></main></section>`;
 }
 
 function renderShare() {
@@ -377,7 +389,7 @@ function renderModal() {
   } else if (modal.type === "confirm") {
     body = `${icon(`${A}/lion-home.png`, "小狮子", "sheet-lion")}<h2>${escapeHtml(modal.title)}</h2><p class="confirm-message">${escapeHtml(modal.message)}</p><button class="primary-button" type="button" data-action="confirm-pending">确认</button><button class="plain-button" type="button" data-action="close-modal">取消</button>`;
   }
-  modalRoot.innerHTML = `<div class="modal-scrim"><section class="bottom-sheet" role="dialog" aria-modal="true" aria-label="${escapeHtml(modal.title || modal.type)}"><div class="drag-handle"></div>${body}</section></div>`;
+  modalRoot.innerHTML = `<div class="modal-scrim"><section class="bottom-sheet modal-${modal.type}" role="dialog" aria-modal="true" aria-label="${escapeHtml(modal.title || modal.type)}"><div class="drag-handle"></div>${body}</section></div>`;
 }
 
 function previousDate() {
