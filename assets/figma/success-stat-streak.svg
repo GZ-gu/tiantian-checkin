@@ -1,0 +1,25 @@
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="20" height="20" fill="#1E1E1E"/>
+<g id="&#231;&#187;&#132;&#228;&#187;&#182;&#233;&#155;&#134;">
+<path d="M-3186 -888C-3186 -889.105 -3185.1 -890 -3184 -890H1910C1911.1 -890 1912 -889.105 1912 -888V2705C1912 2706.1 1911.1 2707 1910 2707H-3184C-3185.1 2707 -3186 2706.1 -3186 2705V-888Z" fill="#444444"/>
+<path d="M-3184 -890V-889H1910V-890V-891H-3184V-890ZM1912 -888H1911V2705H1912H1913V-888H1912ZM1910 2707V2706H-3184V2707V2708H1910V2707ZM-3186 2705H-3185V-888H-3186H-3187V2705H-3186ZM-3184 2707V2706C-3184.55 2706 -3185 2705.55 -3185 2705H-3186H-3187C-3187 2706.66 -3185.66 2708 -3184 2708V2707ZM1912 2705H1911C1911 2705.55 1910.55 2706 1910 2706V2707V2708C1911.66 2708 1913 2706.66 1913 2705H1912ZM1910 -890V-889C1910.55 -889 1911 -888.552 1911 -888H1912H1913C1913 -889.657 1911.66 -891 1910 -891V-890ZM-3184 -890V-891C-3185.66 -891 -3187 -889.657 -3187 -888H-3186H-3185C-3185 -888.552 -3184.55 -889 -3184 -889V-890Z" fill="white" fill-opacity="0.1"/>
+<g id="Stats / Weekly Summary">
+<path d="M-55 -4C-55 -12.8366 -47.8366 -20 -39 -20H286C294.837 -20 302 -12.8366 302 -4V84C302 92.8366 294.837 100 286 100H-39C-47.8366 100 -55 92.8366 -55 84V-4Z" fill="white"/>
+<g id="Stats / Items Row">
+<g id="Stats / Item / Streak">
+<g id="Stats / Icon Tile / Streak">
+<rect x="-10" y="-10" width="40" height="40" rx="20" fill="#EDF9E3"/>
+<g id="List (&#229;&#136;&#151;&#232;&#161;&#168;)">
+<path id="Vector" d="M2.08325 4.16663L3.33325 5.41663L5.83325 2.91663" stroke="#61C91F" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M2.08325 10L3.33325 11.25L5.83325 8.75" stroke="#61C91F" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M2.08325 15.8334L3.33325 17.0834L5.83325 14.5834" stroke="#61C91F" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_4" d="M8.75 10H17.9167" stroke="#61C91F" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_5" d="M8.75 15.8334H17.9167" stroke="#61C91F" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_6" d="M8.75 4.16663H17.9167" stroke="#61C91F" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>
