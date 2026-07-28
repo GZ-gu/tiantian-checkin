@@ -22,7 +22,7 @@ import {
   getTaskTimeline,
   localDateISO,
   seedDemoState
-} from "./core.mjs?v=1.2.3";
+} from "./core.mjs?v=1.2.4";
 
 const STORAGE_KEY = "tiantian-checkin-v1.2-production";
 const A = "./assets/figma";
@@ -273,7 +273,7 @@ function renderTaskCard(task, date) {
 }
 
 function renderPublishHero(taskCount) {
-  return `<header class="publish-hero">${statusBar()}${icon(`${A}/lion-publish.png`, "小狮子", "publish-lion")}<div><h1>发布任务</h1><span>已发布 <strong>${taskCount}</strong> 个</span><p>每天进步一点点，攒成孩子看得到的小勋章。</p></div></header>`;
+  return `<header class="publish-hero">${icon(`${A}/home-wave.svg`, "", "hero-wave")}${icon(`${A}/spark-dot-lg.svg`, "", "spark spark-dot-lg")}${icon(`${A}/spark-dot-sm.svg`, "", "spark spark-dot-sm")}${icon(`${A}/spark-star-lg.svg`, "", "spark spark-star-lg")}${icon(`${A}/spark-star-sm.svg`, "", "spark spark-star-sm")}${statusBar()}${icon(`${A}/lion-publish.png`, "小狮子", "publish-lion")}<div class="publish-copy"><h1>发布任务</h1><span>已发布 <strong>${taskCount}</strong> 个</span><p>每天进步一点点，攒成孩子看得到的小勋章。</p></div></header>`;
 }
 
 function taskFields(task = null) {
@@ -282,7 +282,8 @@ function taskFields(task = null) {
 
 function renderPublish() {
   const tasks = state.tasks.filter((task) => !["archived", "deleted"].includes(task.status));
-  return `<section class="screen publish-screen">${renderPublishHero(tasks.length)}<form id="taskForm" class="form-card" novalidate>${taskFields()}<button class="primary-button compact" type="submit">${icon(`${A}/add.svg`)}<span>新建任务</span></button></form><div class="section-heading manage-heading"><h2>任务列表</h2><time>${formatDate(localDateISO(), true)} ${weekdayText()}</time></div><div class="manage-list">${tasks.map(renderManageCard).join("")}</div>${navMarkup("publish")}</section>`;
+  const taskList = tasks.length ? `<div class="section-heading manage-heading"><h2>任务列表</h2><time>${formatDate(localDateISO(), true)} ${weekdayText()}</time></div><div class="manage-list">${tasks.map(renderManageCard).join("")}</div>` : "";
+  return `<section class="screen publish-screen">${renderPublishHero(tasks.length)}<form id="taskForm" class="form-card" novalidate>${taskFields()}<button class="primary-button compact" type="submit">${icon(`${A}/add.svg`)}<span>新建任务</span></button></form>${taskList}${navMarkup("publish")}</section>`;
 }
 
 function renderManageCard(task) {
