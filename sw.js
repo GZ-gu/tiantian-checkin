@@ -1,10 +1,10 @@
-const CACHE_NAME = "tiantian-checkin-v1.2.3";
+const CACHE_NAME = "tiantian-checkin-v1.2.4";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=1.2.3",
-  "./app.js?v=1.2.3",
-  "./core.mjs?v=1.2.3",
+  "./styles.css?v=1.2.4",
+  "./app.js?v=1.2.4",
+  "./core.mjs?v=1.2.4",
   "./manifest.webmanifest",
   "./assets/fonts/PuHui-Regular.ttf",
   "./assets/fonts/PuHui-Medium.ttf",
