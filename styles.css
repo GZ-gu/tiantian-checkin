@@ -292,17 +292,11 @@ img { display: block; }
 .success-heading > img { width: 125px; height: 125px; flex: none; object-fit: contain; }
 .success-heading h1 { margin: 0; font-size: 32px; line-height: 45px; }
 .success-heading p { margin: 4px 0 0; color: var(--muted); font-size: 14px; line-height: 20px; }
+.confetti-animation { position: absolute; z-index: 5; left: 0; width: 100%; pointer-events: none; object-fit: fill; animation: confetti-overlay 5.1s ease-out forwards; }
+.success-confetti-animation { top: 145px; height: 260px; }
 .celebration { width: 210px; height: 210px; position: absolute; left: 92px; top: 192px; display: grid; place-items: center; }
 .success-medal-ring { width: 210px; height: 210px; display: grid; place-items: center; position: relative; border: 12px solid rgba(255, 255, 255, .64); border-radius: 50%; box-shadow: 0 0 0 9px rgba(255, 197, 38, .10), 0 0 0 19px rgba(255, 197, 38, .06); animation: medal-pop .62s cubic-bezier(.2, 1.2, .4, 1); }
 .success-medal { width: 160px; height: 160px; }
-.confetti-dot, .confetti-star { position: absolute; z-index: 2; pointer-events: none; }
-.confetti-dot { width: 9px; height: 9px; border-radius: 50%; }
-.confetti-dot.blue { left: -62px; top: -101px; background: #74c5f2; }
-.confetti-dot.orange { right: -57px; top: -70px; background: #ff9f43; }
-.confetti-dot.mint { left: -51px; top: 32px; background: #5ac8b0; }
-.confetti-dot.pink { right: -66px; top: -2px; background: #f37e9d; }
-.confetti-dot.yellow { right: -17px; top: -55px; background: #ffc526; }
-.confetti-star { width: 18px; height: 18px; right: -35px; top: 34px; background: url("./assets/figma/spark-star-lg.svg") center / contain no-repeat; }
 .success-progress { width: 360px; height: 136px; padding: 20px 27px 17px; position: absolute; left: 17px; top: 408px; border-radius: 16px; background: #fff; text-align: center; box-shadow: var(--shadow); }
 .success-progress h2 { margin: 0; font-size: 20px; line-height: 28px; }
 .success-progress p { margin: 9px 0 10px; color: var(--ink); font-size: 14px; line-height: 20px; }
@@ -329,6 +323,7 @@ img { display: block; }
 .reward-screen { background: var(--warm); }
 .reward-screen > .status-bar { width: 100%; position: absolute; left: 0; top: 0; }
 .reward-celebration { height: 382px; padding-top: 67px; position: relative; background: var(--brand); text-align: center; }
+.reward-confetti-animation { top: 0; height: 382px; }
 .reward-medal { width: 152px; height: 152px; margin: 0 auto; }
 .reward-celebration > span { height: 30px; margin: 9px auto 0; padding: 0 18px; display: inline-flex; align-items: center; border-radius: 15px; background: #fff0b3; color: #7a4d00; font-size: 12px; font-weight: 700; }
 .reward-celebration h1 { margin: 16px 0 5px; font-size: 25px; }
@@ -378,6 +373,11 @@ img { display: block; }
 @keyframes sheet-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
 @keyframes medal-pop { 0% { transform: scale(.62); opacity: 0; } 65% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
 @keyframes toast-in { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes confetti-overlay { 0%, 84% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti-animation { display: none; }
+}
 
 @media (display-mode: standalone) {
   .status-bar { height: env(safe-area-inset-top); min-height: 8px; padding: 0; visibility: hidden; }

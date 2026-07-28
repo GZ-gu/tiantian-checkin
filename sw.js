@@ -1,10 +1,10 @@
-const CACHE_NAME = "tiantian-checkin-v1.2.4";
+const CACHE_NAME = "tiantian-checkin-v1.2.5";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=1.2.4",
-  "./app.js?v=1.2.4",
-  "./core.mjs?v=1.2.4",
+  "./styles.css?v=1.2.5",
+  "./app.js?v=1.2.5",
+  "./core.mjs?v=1.2.5",
   "./manifest.webmanifest",
   "./assets/fonts/PuHui-Regular.ttf",
   "./assets/fonts/PuHui-Medium.ttf",
@@ -18,6 +18,7 @@ const APP_SHELL = [
   "./assets/figma/check.svg",
   "./assets/figma/chevron.svg",
   "./assets/figma/close.svg",
+  "./assets/figma/confetti.svg",
   "./assets/figma/day-lion.svg",
   "./assets/figma/down.svg",
   "./assets/figma/edit-name.svg",

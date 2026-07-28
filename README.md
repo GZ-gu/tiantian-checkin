@@ -2,7 +2,7 @@
 
 面向家庭的轻量学习打卡 PWA。家长创建任务，孩子通过每日打卡、勋章成长和家庭奖励回应获得持续反馈。
 
-当前发布版本为 `1.2.4`，实现 [V1.1 产品规格](./docs/天天打卡_V1.1_PRD.md)。视觉以 [Figma 天天打卡](https://www.figma.com/design/fms7qDu4GjPsyWlEXG5tnh/%E5%A4%A9%E5%A4%A9%E6%89%93%E5%8D%A1?node-id=106-71) 的 13 个正式画板为准。
+当前发布版本为 `1.2.5`，实现 [V1.1 产品规格](./docs/天天打卡_V1.1_PRD.md)。视觉以 [Figma 天天打卡](https://www.figma.com/design/fms7qDu4GjPsyWlEXG5tnh/%E5%A4%A9%E5%A4%A9%E6%89%93%E5%8D%A1?node-id=106-71) 的 13 个正式画板为准。
 
 ## 功能
 
