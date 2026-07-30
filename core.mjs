@@ -272,10 +272,30 @@ export function totalUnlockedBadges(state) {
   return state.tasks.reduce((total, task) => total + new Set(task.unlockedMilestones || []).size, 0);
 }
 
-export function getTaskTimeline(state, taskId) {
+export function getTaskTimeline(state, taskId, today = localDateISO()) {
   const task = getTask(state, taskId);
   if (!task) return [];
   const items = [{ id: `${task.id}_created`, type: "created", at: task.createdAt, task }];
+  const createdDate = localDateISO(task.createdAt);
+  const cursor = new Date(`${createdDate}T12:00:00`);
+  const end = new Date(`${today}T12:00:00`);
+  cursor.setDate(cursor.getDate() + 1);
+  while (cursor < end) {
+    const date = localDateISO(cursor);
+    const checkIns = state.checkIns.filter((item) => item.taskId === taskId && item.date === date);
+    const makeup = checkIns.find((item) => item.type === "makeup" && item.status === "active");
+    const active = checkIns.find((item) => item.status === "active");
+    if (!active || makeup) {
+      items.push({
+        id: `${task.id}_missed_${date}`,
+        type: "missed",
+        at: `${date}T23:59:00`,
+        date,
+        madeUp: Boolean(makeup)
+      });
+    }
+    cursor.setDate(cursor.getDate() + 1);
+  }
   for (const checkIn of state.checkIns.filter((item) => item.taskId === taskId)) {
     items.push({ id: checkIn.id, type: checkIn.type, at: checkIn.createdAt, checkIn });
     if (checkIn.revokedAt) items.push({ id: `${checkIn.id}_revoked`, type: "revoked", at: checkIn.revokedAt, checkIn });

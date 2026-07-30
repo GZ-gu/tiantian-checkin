@@ -13,6 +13,7 @@ import {
   getDateTaskStatus,
   calculateGlobalStats,
   totalUnlockedBadges,
+  getTaskTimeline,
   seedDemoState
 } from "../core.mjs";
 
@@ -107,6 +108,18 @@ test("date selection returns tasks and the correct interaction state", () => {
   assert.equal(getDateTaskStatus(state, "task_1", "2026-07-24", "2026-07-25"), "checked");
   assert.equal(getDateTaskStatus(state, "task_1", "2026-07-25", "2026-07-25"), "today");
   assert.equal(getDateTaskStatus(state, "task_1", "2026-07-26", "2026-07-25"), "future");
+});
+
+test("timeline keeps missed-day rows and marks later makeup", () => {
+  let state = baseState();
+  state.tasks[0].createdAt = "2026-07-21T09:00:00+08:00";
+  state = checkIn(state, { taskId: "task_1", type: "makeup", date: "2026-07-22", reason: "已完成但漏打卡" }, NOW);
+  const missed = getTaskTimeline(state, "task_1", "2026-07-25").filter((item) => item.type === "missed");
+  assert.deepEqual(missed.map((item) => [item.date, item.madeUp]), [
+    ["2026-07-24", false],
+    ["2026-07-23", false],
+    ["2026-07-22", true]
+  ]);
 });
 
 test("demo state is valid and immediately renderable", () => {

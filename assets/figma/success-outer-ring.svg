@@ -1,0 +1,9 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="210" height="210" viewBox="0 0 210 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle id="Medal / Achievement Artwork / Outer Ring" cx="105" cy="105" r="101" stroke="url(#paint0_radial_0_175)" stroke-width="8"/>
+<defs>
+<radialGradient id="paint0_radial_0_175" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(105 105) scale(105)">
+<stop offset="0.899038" stop-color="#FFF8E9" stop-opacity="0"/>
+<stop offset="1" stop-color="#FFF4D7"/>
+</radialGradient>
+</defs>
+</svg>

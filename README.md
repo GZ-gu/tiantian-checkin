@@ -2,7 +2,7 @@
 
 面向家庭的轻量学习打卡 PWA。家长创建任务，孩子通过每日打卡、勋章成长和家庭奖励回应获得持续反馈。
 
-当前发布版本为 `1.2.5`，实现 [V1.1 产品规格](./docs/天天打卡_V1.1_PRD.md)。视觉以 [Figma 天天打卡](https://www.figma.com/design/fms7qDu4GjPsyWlEXG5tnh/%E5%A4%A9%E5%A4%A9%E6%89%93%E5%8D%A1?node-id=106-71) 的 13 个正式画板为准。
+当前发布版本为 `1.2.15`，实现 [V1.1 产品规格](./docs/天天打卡_V1.1_PRD.md)。视觉以 [Figma 天天打卡](https://www.figma.com/design/fms7qDu4GjPsyWlEXG5tnh/%E5%A4%A9%E5%A4%A9%E6%89%93%E5%8D%A1?node-id=106-71) 的 13 个主流程画板和首次空首页为准。
 
 ## 功能
 
@@ -16,10 +16,10 @@
 ## 本地运行
 
 ```bash
-python3 -m http.server 4185 --bind 127.0.0.1
+python3 -m http.server 4186 --bind 127.0.0.1
 ```
 
-打开 `http://127.0.0.1:4185/`。不要直接双击 `index.html`，Service Worker 需要通过 HTTP 或 HTTPS 运行。
+打开 `http://127.0.0.1:4186/`。不要直接双击 `index.html`，Service Worker 需要通过 HTTP 或 HTTPS 运行。
 
 ## 测试
 
@@ -32,6 +32,7 @@ node --test tests/core.test.mjs
 ## 文档
 
 - [产品开发交付文档](./docs/天天打卡-产品开发交付文档.md)：开发、运行、测试、部署和安装说明。
+- [视觉验收报告](./docs/figma-baseline/视觉验收报告-1.2.15.md)：Figma节点、截图、差异和浏览器验收结果。
 - [V1.1 产品规格](./docs/天天打卡_V1.1_PRD.md)：现役业务规则。
 - `docs/archive/`：早期探索文档，仅供追溯，不作为开发依据。
 - `docs/superpowers/`：本次正式版设计说明与实施计划。
