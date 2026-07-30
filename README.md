@@ -4,6 +4,8 @@
 
 当前发布版本为 `1.2.15`，实现 [V1.1 产品规格](./docs/天天打卡_V1.1_PRD.md)。视觉以 [Figma 天天打卡](https://www.figma.com/design/fms7qDu4GjPsyWlEXG5tnh/%E5%A4%A9%E5%A4%A9%E6%89%93%E5%8D%A1?node-id=106-71) 的 13 个主流程画板和首次空首页为准。
 
+在线体验：https://gz-gu.github.io/tiantian-checkin/
+
 ## 功能
 
 - 首次打开为零任务、零打卡的空首页。
