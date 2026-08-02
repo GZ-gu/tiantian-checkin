@@ -14,6 +14,7 @@ import {
   getActiveCheckIn,
   getTasksForDate,
   getDateTaskStatus,
+  isDateFullyChecked,
   countTaskCheckIns,
   getCurrentMilestone,
   getMilestonesForTask,
@@ -22,7 +23,7 @@ import {
   getTaskTimeline,
   localDateISO,
   seedDemoState
-} from "./core.mjs?v=1.2.15";
+} from "./core.mjs?v=1.2.16";
 
 const STORAGE_KEY = "tiantian-checkin-v1.2-production";
 const A = "./assets/figma";
@@ -138,6 +139,16 @@ function icon(src, alt = "", className = "") {
   return `<img class="${className}" src="${src}" alt="${alt}" />`;
 }
 
+function profileAvatarSrc() {
+  return state.profile.avatar?.startsWith("data:image/")
+    ? state.profile.avatar
+    : `${A}/profile-avatar.png?v=1.2.16`;
+}
+
+function scrollAppTop() {
+  document.querySelector(".app-viewport")?.scrollTo(0, 0);
+}
+
 function statusBar() {
   const now = new Date();
   const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}`;
@@ -222,8 +233,8 @@ function getWeekDates(selectedDate = ui.selectedDate) {
   });
 }
 
-function growthDayState(iso, today, completedDates) {
-  if (completedDates.has(iso)) return "done";
+function growthDayState(iso, today) {
+  if (isDateFullyChecked(state, iso)) return "done";
   if (iso === today) return "today";
   if (iso < today && getTasksForDate(state, iso).length) return "past";
   return "future";
@@ -231,13 +242,12 @@ function growthDayState(iso, today, completedDates) {
 
 function renderGrowthCard(emptyState = false) {
   const today = localDateISO();
-  const completedDates = new Set(state.checkIns.filter((item) => item.status === "active").map((item) => item.date));
   const days = getWeekDates().map((iso) => {
     const date = new Date(`${iso}T12:00:00`);
     const selected = iso === ui.selectedDate;
     const todayDate = iso === today;
-    const completed = completedDates.has(iso);
-    const stateClass = growthDayState(iso, today, completedDates);
+    const completed = isDateFullyChecked(state, iso);
+    const stateClass = growthDayState(iso, today);
     const symbol = completed ? icon(`${A}/check.svg`) : todayDate ? icon(`${A}/day-lion.svg`) : "";
     const weekday = `周${"日一二三四五六"[date.getDay()]}`;
     const day = String(date.getDate()).padStart(2, "0");
@@ -255,14 +265,13 @@ function renderMonthCalendar() {
   const gridStart = new Date(year, month, 1, 12);
   gridStart.setDate(gridStart.getDate() - gridStart.getDay());
   const rows = Math.ceil((new Date(year, month + 1, 0, 12).getDate() + new Date(year, month, 1, 12).getDay()) / 7);
-  const completed = new Set(state.checkIns.filter((item) => item.status === "active").map((item) => item.date));
   const today = localDateISO();
   const dates = Array.from({ length: rows * 7 }, (_, index) => {
     const date = new Date(gridStart);
     date.setDate(gridStart.getDate() + index);
     const iso = localDateISO(date);
-    const done = completed.has(iso);
-    const stateClass = growthDayState(iso, today, completed);
+    const done = isDateFullyChecked(state, iso);
+    const stateClass = growthDayState(iso, today);
     const symbol = done ? icon(`${A}/check.svg`) : iso === today ? icon(`${A}/day-lion.svg`) : "";
     return `<button type="button" class="month-track-day ${stateClass} ${iso === ui.selectedDate ? "selected" : ""} ${date.getMonth() !== month ? "adjacent" : ""}" data-action="select-date" data-date="${iso}" aria-label="${formatDate(iso)}"><i>${symbol}</i><b>${String(date.getDate()).padStart(2, "0")}</b></button>`;
   }).join("");
@@ -295,14 +304,14 @@ function renderTaskCard(task, date) {
   const segments = Array.from({ length: progress.segmentTarget }, (_, index) => `<i class="${index < progress.segmentDone ? "done" : ""}"></i>`).join("");
   let action = "";
   if (completed) action = `<button class="checkin-button" type="button" data-action="reward" data-task-id="${task.id}">回应奖励</button>`;
-  else if (status === "today") action = `<button class="checkin-button" type="button" data-action="checkin" data-task-id="${task.id}">${icon(`${A}/success.svg`)}<span>打卡</span></button>`;
-  else if (status === "missed") action = `<button class="checkin-button makeup" type="button" data-action="makeup" data-task-id="${task.id}" data-date="${date}">补卡</button>`;
+  else if (status === "today") action = `<button class="checkin-button" type="button" data-action="checkin" data-task-id="${task.id}">${icon(`${A}/checkin-success.svg`)}<span>打卡</span></button>`;
+  else if (status === "missed") action = `<button class="checkin-button makeup" type="button" data-action="makeup" data-task-id="${task.id}" data-date="${date}">${icon(`${A}/makeup.svg`)}<span>补卡</span></button>`;
   else if (checked) action = `<span class="completed-label">${icon(`${A}/success.svg`)}已完成打卡</span>`;
   else action = `<span class="future-label">尚未到打卡时间</span>`;
   const footer = checked && !completed
     ? `<span class="completed-indicator">${icon(`${A}/success.svg`)}<span>已完成打卡</span></span><button class="history-link history-link-right" type="button" data-action="records" data-task-id="${task.id}"><span>查看打卡记录</span>${icon(`${A}/chevron.svg`)}</button>`
     : `<button class="history-link" type="button" data-action="records" data-task-id="${task.id}"><span>查看打卡记录</span>${icon(`${A}/chevron.svg`)}</button>${action}`;
-  return `<article class="task-card"><div class="task-top"><h3>${escapeHtml(task.title)}</h3>${checked ? `<span class="status-check">${icon(`${A}/check.svg`)}</span>` : ""}</div>${renderMeta(task)}<div class="task-progress">${medalMarkup(progress, progress.fill)}<div class="progress-copy"><strong>${progress.name}（${progress.segmentDone}/${progress.segmentTarget}）</strong><div class="segment-bar">${segments}</div></div><button class="share-link" type="button" data-action="share" data-task-id="${task.id}">${icon(`${A}/share.svg`)}<span>分享</span></button></div><div class="task-footer ${checked ? "completed" : ""}">${footer}</div></article>`;
+  return `<article class="task-card"><div class="task-top"><h3>${escapeHtml(task.title)}</h3>${checked ? `<span class="status-check">${icon(`${A}/check.svg`)}</span>` : ""}</div>${renderMeta(task)}<div class="task-progress">${medalMarkup(progress, progress.fill)}<div class="progress-copy"><strong>${progress.name}（${progress.segmentDone}/${progress.segmentTarget}）</strong><div class="segment-bar">${segments}</div></div><button class="share-link" type="button" data-action="share" data-task-id="${task.id}" aria-label="分享">${icon(`${A}/share.svg`)}<span>分享</span></button></div><div class="task-footer ${checked ? "completed" : ""}">${footer}</div></article>`;
 }
 
 function renderPublishHero(taskCount) {
@@ -346,11 +355,11 @@ function milestoneSummary(milestone) {
 
 function renderBadges() {
   const stats = calculateGlobalStats(state);
-  return `<section class="screen badges-screen"><header class="badges-hero">${icon(`${A}/home-wave.svg`, "", "badges-wave")}${statusBar()}<button class="profile-link" type="button" data-view="profile">${icon(`${A}/profile-avatar.png?v=1.2.15`, "头像")}<span><strong>${escapeHtml(state.profile.nickname)}</strong><small>${icon(`${A}/edit-name.svg`)}编辑信息</small></span></button>${icon(`${A}/lion-badges.png`, "小狮子", "badges-lion")}</header><div class="badge-stats"><div><span>坚持打卡</span><strong>${stats.cumulativeLabel}<small> 天</small></strong></div><div><span>完成任务</span><strong>${state.tasks.filter((task) => ["completed", "archived"].includes(task.status)).length}<small> 个</small></strong></div><div><span>获得勋章</span><strong>${totalUnlockedBadges(state)}<small> 枚</small></strong></div></div><h2 class="medal-wall-title">勋章墙</h2><div class="medal-list">${MILESTONES.map((milestone) => { const summary = milestoneSummary(milestone); return `<article class="medal-card">${medalMarkup(milestone, summary.fill)}<div><h3>${milestone.name}勋章<button type="button" aria-label="查看勋章详情">${icon(`${A}/chevron.svg`)}</button></h3><p>累计获得 <strong>${summary.earned}</strong> 次</p></div></article>`; }).join("")}</div>${navMarkup("badges")}</section>`;
+  return `<section class="screen badges-screen"><header class="badges-hero">${icon(`${A}/home-wave.svg`, "", "badges-wave")}${statusBar()}<button class="profile-link" type="button" data-view="profile">${icon(profileAvatarSrc(), "头像")}<span><strong>${escapeHtml(state.profile.nickname)}</strong><small>${icon(`${A}/edit-name.svg`)}编辑信息</small></span></button>${icon(`${A}/lion-badges.png?v=1.2.16`, "小狮子", "badges-lion")}</header><div class="badge-stats"><div><span>坚持打卡</span><strong>${stats.cumulativeLabel}<small> 天</small></strong></div><div><span>完成任务</span><strong>${state.tasks.filter((task) => ["completed", "archived"].includes(task.status)).length}<small> 个</small></strong></div><div><span>获得勋章</span><strong>${totalUnlockedBadges(state)}<small> 枚</small></strong></div></div><h2 class="medal-wall-title">勋章墙</h2><div class="medal-list">${MILESTONES.map((milestone) => { const summary = milestoneSummary(milestone); return `<article class="medal-card">${medalMarkup(milestone, summary.fill)}<div><h3>${milestone.name}勋章</h3><p>累计获得 <strong>${summary.earned}</strong> 次</p></div></article>`; }).join("")}</div>${navMarkup("badges")}</section>`;
 }
 
 function renderProfile() {
-  return `<section class="screen profile-screen">${pageHeader("个人信息", "badges")}<form id="profileForm" class="profile-card" novalidate><label class="profile-avatar"><img src="${A}/profile-avatar.png?v=1.2.15" alt="小狮子头像" /><span>点击切换头像</span><input type="hidden" name="avatar" value="profile-avatar" /></label><div class="field"><label for="nickname">打卡人昵称</label><input class="field-control" id="nickname" name="nickname" maxlength="5" value="${escapeHtml(state.profile.nickname)}" /><div class="field-meta"><span data-error="nickname"></span><span data-count="nickname">${[...state.profile.nickname].length}/5</span></div></div><input type="hidden" name="gender" value="${escapeHtml(state.profile.gender || "保密")}" /><input type="hidden" name="age" value="${state.profile.age || ""}" /><button class="primary-button" type="submit">保存信息</button></form></section>`;
+  return `<section class="screen profile-screen">${pageHeader("个人信息", "badges")}<form id="profileForm" class="profile-card" novalidate><label class="profile-avatar"><img data-avatar-preview src="${profileAvatarSrc()}" alt="当前头像" /><span>点击切换头像</span><input id="avatarFile" class="visually-hidden" type="file" accept="image/png,image/jpeg,image/webp" /><input data-avatar-value type="hidden" name="avatar" value="${escapeHtml(state.profile.avatar || "profile-avatar")}" /></label><div class="field"><label for="nickname">打卡人昵称</label><input class="field-control" id="nickname" name="nickname" maxlength="5" value="${escapeHtml(state.profile.nickname)}" /><div class="field-meta"><span data-error="nickname"></span><span data-count="nickname">${[...state.profile.nickname].length}/5</span></div></div><input type="hidden" name="gender" value="${escapeHtml(state.profile.gender || "保密")}" /><input type="hidden" name="age" value="${state.profile.age || ""}" /><button class="primary-button" type="submit">保存信息</button></form></section>`;
 }
 
 function renderRecords() {
@@ -376,7 +385,7 @@ function renderTimelineItem(item, task, readOnly) {
     return timelineMarkup(time, "未打卡", action);
   }
   const check = item.checkIn;
-  if (item.type === "revoked") return timelineMarkup(time, `已撤销打卡（原因：${escapeHtml(check.revokeReason)}）`);
+  if (item.type === "revoked") return timelineMarkup(time, `已撤销${formatDate(check.date)}打卡（原因：${escapeHtml(check.revokeReason)}）`);
   const content = item.type === "makeup" ? `完成${formatDate(check.date)}补卡（原因：${escapeHtml(check.reason)}）` : "完成打卡";
   const action = !readOnly && check.status === "active" ? `<button class="record-tag" type="button" data-action="revoke" data-checkin-id="${check.id}">${icon(`${A}/revoke.svg`)}撤销</button>` : `<span class="record-tag muted">${check.status === "revoked" ? "已撤销" : "已归档"}</span>`;
   return timelineMarkup(time, content, action);
@@ -399,7 +408,7 @@ function renderSuccess() {
   const count = countTaskCheckIns(state, task.id);
   const segments = Array.from({ length: progress.segmentTarget }, (_, index) => `<i class="${index < progress.segmentDone ? "done" : ""}"></i>`).join("");
   const staticConfetti = ["blue", "orange", "mint", "pink", "yellow", "star"].map((name) => icon(`${A}/confetti-${name}.svg`, "", `success-confetti confetti-${name}`)).join("");
-  return `<section class="success-screen ${isMilestone ? "milestone-success" : "standard-success"}">${statusBar()}<button class="success-close" type="button" data-action="close-success" aria-label="返回">${icon(`${A}/back.svg`)}</button><div class="success-heading">${icon(`${A}/lion-success.png?v=1.2.15`, "小狮子")}<div><h1>打卡成功!</h1><p>今天的努力已经记录下来了</p></div></div>${staticConfetti}${icon(`${A}/confetti.svg`, "", "confetti-animation success-confetti-animation")}<div class="celebration"><div class="success-medal-ring">${icon(`${A}/success-outer-ring.svg`, "", "success-outer-ring")}<div class="success-medal-core">${icon(`${A}/success-inner-ring.svg`, "", "success-inner-ring")}${medalMarkup(milestone, progress.fill, "success-medal")}</div></div></div><article class="success-progress"><h2>${milestone.name}</h2><p>勋章注入 <strong>${progress.segmentDone}</strong> 格 · 当前 ${progress.segmentDone}/${progress.segmentTarget}</p><div class="success-bar">${segments}</div><span>${isMilestone ? `恭喜你，成功获得${milestone.name}勋章！` : `再完成 ${Math.max(progress.segmentTarget - progress.segmentDone, 0)} 天即可点亮勋章`}</span></article><div class="success-stats"><div><span class="success-stat-icon green">${icon(`${A}/success-stat-streak.svg`)}</span><span>连续坚持</span><strong>${calculateGlobalStats(state).streakDays}<small> 天</small></strong></div><div><span class="success-stat-icon teal">${icon(`${A}/success-stat-week.svg`)}</span><span>本周完成</span><strong>${getWeekDates().filter((date) => state.checkIns.some((item) => item.status === "active" && item.date === date && item.taskId === task.id)).length}<small> 天</small></strong></div><div><span class="success-stat-icon yellow">${icon(`${A}/success-stat-target.svg`)}</span><span>距离目标</span><strong>${Math.max(task.targetDays - count, 0)}<small> 天</small></strong></div></div>${ui.success.final ? `<button class="primary-button success-next" type="button" data-action="open-reward" data-task-id="${task.id}">回应约定奖励</button>` : `<button class="primary-button success-next" type="button" data-action="share" data-task-id="${task.id}">${icon(`${A}/share-success.svg`)}<span>生成分享卡</span></button>`}<button class="plain-button success-return" type="button" data-action="close-success">返回今日任务</button></section>`;
+  return `<section class="success-screen ${isMilestone ? "milestone-success" : "standard-success"}">${statusBar()}<button class="success-close" type="button" data-action="close-success" aria-label="返回">${icon(`${A}/back.svg`)}</button><div class="success-heading">${icon(`${A}/lion-success.png?v=1.2.16`, "小狮子")}<div><h1>打卡成功!</h1><p>今天的努力已经记录下来了</p></div></div>${staticConfetti}${icon(`${A}/confetti.svg`, "", "confetti-animation success-confetti-animation")}<div class="celebration"><div class="success-medal-ring">${icon(`${A}/success-outer-ring.svg`, "", "success-outer-ring")}<div class="success-medal-core">${icon(`${A}/success-inner-ring.svg`, "", "success-inner-ring")}${medalMarkup(milestone, progress.fill, "success-medal")}</div></div></div><article class="success-progress"><h2>${milestone.name}</h2><p>勋章注入 <strong>${progress.segmentDone}</strong> 格 · 当前 ${progress.segmentDone}/${progress.segmentTarget}</p><div class="success-bar">${segments}</div><span>${isMilestone ? `恭喜你，成功获得${milestone.name}勋章！` : `再完成 ${Math.max(progress.segmentTarget - progress.segmentDone, 0)} 天即可点亮勋章`}</span></article><div class="success-stats"><div><span class="success-stat-icon green">${icon(`${A}/success-stat-streak.svg`)}</span><span>连续坚持</span><strong>${calculateGlobalStats(state).streakDays}<small> 天</small></strong></div><div><span class="success-stat-icon teal">${icon(`${A}/success-stat-week.svg`)}</span><span>本周完成</span><strong>${getWeekDates().filter((date) => state.checkIns.some((item) => item.status === "active" && item.date === date && item.taskId === task.id)).length}<small> 天</small></strong></div><div><span class="success-stat-icon yellow">${icon(`${A}/success-stat-target.svg`)}</span><span>距离目标</span><strong>${Math.max(task.targetDays - count, 0)}<small> 天</small></strong></div></div>${ui.success.final ? `<button class="primary-button success-next" type="button" data-action="open-reward" data-task-id="${task.id}">回应约定奖励</button>` : `<button class="primary-button success-next" type="button" data-action="share" data-task-id="${task.id}">${icon(`${A}/share-success.svg`)}<span>生成分享卡</span></button>`}<button class="plain-button success-return" type="button" data-action="close-success">返回今日任务</button></section>`;
 }
 
 function renderReward() {
@@ -420,7 +429,7 @@ function renderShare() {
   }
   const stats = calculateGlobalStats(state);
   const progress = getCurrentMilestone(state, task);
-  return `<section class="share-screen">${pageHeader("分享", ui.returnView, "transparent")}<div id="sharePoster" class="share-poster"><div class="poster-top"><div class="poster-profile"><span class="poster-avatar">${icon(`${A}/profile-avatar.png?v=1.2.15`, "头像")}</span><span><strong>${escapeHtml(state.profile.nickname)}</strong><small>在天天打卡进步</small></span></div><div class="poster-days"><small>天 / 天 / 打 / 卡 / 天 / 天 / 进 / 步</small><span>坚持学习 <strong>${stats.cumulativeLabel}</strong> 天</span></div>${icon(`${A}/poster-lion.png?v=1.2.15`, "小狮子", "poster-lion")}<div class="poster-main-shell"><div class="poster-main"><div class="poster-ribbon"><i></i><span>今日完成</span><i></i></div><h2>${escapeHtml(task.title)}</h2><p>目标打卡${task.targetDays}天&nbsp;&nbsp;已完成打卡${countTaskCheckIns(state, task.id)}天</p><div class="poster-medal-ring">${icon(`${A}/poster-medal-ring.svg`, "", "poster-ring")}${medalMarkup(progress, progress.fill, "poster-medal")}</div></div></div>${icon(`${A}/poster-plant-left.svg`, "", "poster-plant poster-plant-left")}${icon(`${A}/poster-plant-right.svg`, "", "poster-plant poster-plant-right")}<div class="poster-separator"></div></div><footer><div><strong>天天打卡&nbsp; 天天进步</strong><p>长按识别二维码，申请体验</p></div><span class="poster-qr-frame">${icon(`${A}/qr-code.png`, "体验二维码", "poster-qr")}</span></footer></div><button class="save-poster-button" type="button" data-action="save-poster" disabled>${icon(`${A}/share-success.svg`)}<span>保存海报至相册</span></button></section>`;
+  return `<section class="share-screen">${pageHeader("分享", ui.returnView, "transparent")}<div id="sharePoster" class="share-poster"><div class="poster-top"><div class="poster-profile"><span class="poster-avatar">${icon(profileAvatarSrc(), "头像")}</span><span><strong>${escapeHtml(state.profile.nickname)}</strong><small>在天天打卡进步</small></span></div><div class="poster-days"><span class="poster-woodgrain"><i></i><i></i><i></i></span><small>天 / 天 / 打 / 卡 / 天 / 天 / 进 / 步</small><span>坚持学习 <strong>${stats.cumulativeLabel}</strong> 天</span></div>${icon(`${A}/poster-lion.png?v=1.2.16`, "小狮子", "poster-lion")}<div class="poster-main-shell"><div class="poster-main"><div class="poster-ribbon"><i></i><span>今日完成</span><i></i></div><h2>${escapeHtml(task.title)}</h2><p>目标打卡${task.targetDays}天&nbsp;&nbsp;已完成打卡${countTaskCheckIns(state, task.id)}天</p><div class="poster-medal-ring">${icon(`${A}/poster-medal-ring.svg`, "", "poster-ring")}${medalMarkup(progress, progress.fill, "poster-medal")}</div></div></div>${icon(`${A}/poster-plant-left.svg`, "", "poster-plant poster-plant-left")}${icon(`${A}/poster-plant-right.svg`, "", "poster-plant poster-plant-right")}<div class="poster-separator"></div></div><footer><div><strong>天天打卡&nbsp; 天天进步</strong><p>长按识别二维码，申请体验</p></div><span class="poster-qr-frame">${icon(`${A}/qr-code.png`, "体验二维码", "poster-qr")}</span></footer></div><button class="save-poster-button" type="button" data-action="save-poster" disabled>${icon(`${A}/share-success.svg`)}<span>保存海报至相册</span></button></section>`;
 }
 
 function renderModal() {
@@ -470,7 +479,7 @@ app.addEventListener("click", (event) => {
     ui.modal = null;
     if (view !== "edit") ui.editingTaskId = null;
     render();
-    window.scrollTo(0, 0);
+    scrollAppTop();
     return;
   }
   const previousView = ui.view;
@@ -493,7 +502,7 @@ app.addEventListener("click", (event) => {
   if (action === "close-success") { ui.success = null; ui.view = "today"; ui.selectedDate = localDateISO(); }
   if (action === "save-poster") { savePoster(); return; }
   render();
-  if (ui.success || ui.view !== previousView) window.scrollTo(0, 0);
+  if (ui.success || ui.view !== previousView) scrollAppTop();
 });
 
 modalRoot.addEventListener("click", (event) => {
@@ -524,6 +533,25 @@ document.addEventListener("input", (event) => {
   if (error) error.textContent = "";
 });
 
+document.addEventListener("change", (event) => {
+  if (event.target.id !== "avatarFile") return;
+  const file = event.target.files?.[0];
+  if (!file) return;
+  if (file.size > 1024 * 1024) {
+    event.target.value = "";
+    showToast("头像图片请控制在1MB以内");
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    const value = String(reader.result || "");
+    document.querySelector("[data-avatar-preview]")?.setAttribute("src", value);
+    const input = document.querySelector("[data-avatar-value]");
+    if (input) input.value = value;
+  };
+  reader.readAsDataURL(file);
+});
+
 function submitProfile(event) {
   event.preventDefault();
   const form = event.target;
@@ -532,7 +560,7 @@ function submitProfile(event) {
     persist(saveProfile(state, { nickname: data.get("nickname"), avatar: data.get("avatar"), gender: data.get("gender"), age: data.get("age") }));
     ui.view = "badges";
     render();
-    window.scrollTo(0, 0);
+    scrollAppTop();
     showToast("个人信息已保存");
   } catch (error) {
     handleRuleError(error, form);
@@ -551,7 +579,7 @@ function submitTask(event) {
     ui.view = wasEditing ? "publish" : "today";
     ui.selectedDate = localDateISO();
     render();
-    window.scrollTo(0, 0);
+    scrollAppTop();
     showToast(wasEditing ? "任务已修改" : "任务已创建，可以开始打卡啦");
   } catch (error) {
     handleRuleError(error, form);
@@ -569,7 +597,7 @@ function completeDirectCheckIn(taskId) {
     ui.modal = null;
     ui.success = { taskId, milestone: MILESTONES.find((item) => item.days === newDays) || null, final: nextTask.status === "completed" };
     render();
-    window.scrollTo(0, 0);
+    scrollAppTop();
   } catch (error) {
     ui.modal = null;
     render();
@@ -608,7 +636,7 @@ function completePendingAction() {
     const message = { makeup: "补卡成功，进度已经更新", revoke: "已撤销，进度和勋章已回退", delete: "任务已删除", redeem: "奖励已兑现，任务归档完成" }[pending.type];
     ui.modal = null;
     render();
-    if (["delete", "redeem"].includes(pending.type)) window.scrollTo(0, 0);
+    if (["delete", "redeem"].includes(pending.type)) scrollAppTop();
     showToast(message);
   } catch (error) {
     ui.modal = null;

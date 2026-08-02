@@ -11,6 +11,7 @@ import {
   countTaskCheckIns,
   getTasksForDate,
   getDateTaskStatus,
+  isDateFullyChecked,
   calculateGlobalStats,
   totalUnlockedBadges,
   getTaskTimeline,
@@ -98,6 +99,18 @@ test("global cumulative days deduplicate tasks and react to revoke", () => {
   assert.equal(calculateGlobalStats(state).cumulativeDays, 0);
 });
 
+test("a growth day is complete only when every task for that date is checked", () => {
+  let state = baseState();
+  state = createTask(state, { id: "task_2", title: "每天练舞30分钟", targetDays: 7, rewardText: "看一场电影" }, NOW);
+  state.tasks.forEach((task) => { task.createdAt = "2026-07-23T09:00:00+08:00"; });
+  state = checkIn(state, { id: "a", taskId: "task_1", type: "makeup", date: "2026-07-24", reason: "补录" }, NOW);
+  assert.equal(isDateFullyChecked(state, "2026-07-24"), false);
+  state = checkIn(state, { id: "b", taskId: "task_2", type: "makeup", date: "2026-07-24", reason: "补录" }, NOW);
+  assert.equal(isDateFullyChecked(state, "2026-07-24"), true);
+  state = revokeCheckIn(state, "a", "撤销第一项", NOW);
+  assert.equal(isDateFullyChecked(state, "2026-07-24"), false);
+});
+
 test("date selection returns tasks and the correct interaction state", () => {
   let state = baseState();
   state.tasks[0].createdAt = "2026-07-23T09:00:00+08:00";
@@ -120,6 +133,15 @@ test("timeline keeps missed-day rows and marks later makeup", () => {
     ["2026-07-23", false],
     ["2026-07-22", true]
   ]);
+});
+
+test("timeline retains the date of a revoked check-in", () => {
+  let state = baseState();
+  state = checkIn(state, { id: "check_1", taskId: "task_1", type: "makeup", date: "2026-07-24", reason: "补录" }, NOW);
+  state = revokeCheckIn(state, "check_1", "日期录错", "2026-07-25T12:10:00+08:00");
+  const revoked = getTaskTimeline(state, "task_1", "2026-07-25").find((item) => item.type === "revoked");
+  assert.equal(revoked.checkIn.date, "2026-07-24");
+  assert.equal(revoked.checkIn.revokeReason, "日期录错");
 });
 
 test("demo state is valid and immediately renderable", () => {

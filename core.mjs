@@ -147,6 +147,11 @@ export function getDateTaskStatus(state, taskId, date, today = localDateISO()) {
   return "missed";
 }
 
+export function isDateFullyChecked(state, date) {
+  const tasks = getTasksForDate(state, date);
+  return tasks.length > 0 && tasks.every((task) => Boolean(getActiveCheckIn(state, task.id, date)));
+}
+
 function validateReason(reason) {
   const value = String(reason || "").trim();
   if (!value) throw new RuleError("REASON_REQUIRED", "请填写原因");
