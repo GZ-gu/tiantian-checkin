@@ -326,9 +326,8 @@ img { display: block; }
 .success-heading > img { width: 131px; height: 125px; flex: none; object-fit: fill; }
 .success-heading h1 { margin: 0; font-size: 30px; line-height: normal; font-weight: 800; letter-spacing: 0; }
 .success-heading p { margin: 4px 0 0; color: var(--muted); font-size: 14px; line-height: 20px; }
-.confetti-animation { position: absolute; z-index: 5; left: 0; width: 100%; pointer-events: none; object-fit: fill; animation: confetti-overlay 1.8s ease-out forwards; }
+.confetti-animation { position: absolute; z-index: 5; left: 0; width: 100%; pointer-events: none; object-fit: fill; }
 .success-confetti-animation { width: 100%; height: 310px; position: absolute; z-index: 5; left: 0; top: 112px; overflow: hidden; pointer-events: none; }
-.success-confetti-animation svg { width: 100% !important; height: 100% !important; }
 .success-confetti { position: absolute; z-index: 4; }
 .confetti-blue { width: 8px; height: 8px; left: 303px; top: 92px; }
 .confetti-orange { width: 10px; height: 10px; left: 337px; top: 118px; }
@@ -369,7 +368,7 @@ img { display: block; }
 .reward-screen { background: var(--warm); }
 .reward-screen > .status-bar { width: 100%; position: absolute; left: 0; top: 0; }
 .reward-celebration { height: 382px; padding-top: 65px; position: relative; background: radial-gradient(circle at 64px 116px, #fff 0 4px, transparent 4.5px), radial-gradient(circle at 321.5px 133.5px, #5fba57 0 3.5px, transparent 4px), radial-gradient(circle at 305.5px 280.5px, #fff 0 4.5px, transparent 5px), radial-gradient(circle at 44.5px 192.5px, #d16e14 0 2.5px, transparent 3px), var(--brand); text-align: center; }
-.reward-confetti-animation { top: 0; height: 382px; }
+.reward-confetti-animation { top: 0; height: 382px; animation: confetti-overlay 1.8s ease-out forwards; }
 .reward-medal { width: 152px; height: 152px; margin: 0 auto; animation: medal-pop .62s cubic-bezier(.2,1.2,.4,1); }
 .reward-celebration > span { height: 30px; margin: 12px auto 0; padding: 0 18px; display: inline-flex; align-items: center; border-radius: 15px; background: #fff0b3; color: #7a4d00; font-size: 14px; font-weight: 700; }
 .reward-celebration h1 { margin: 19px 0 10px; font-size: 25px; }
@@ -399,7 +398,7 @@ img { display: block; }
 .poster-avatar img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
 .poster-profile > span:last-child { display: grid; gap: 2px; color: var(--brand-on-primary); }
 .poster-profile strong { font-size: 16px; line-height: 18px; font-weight: 800; }.poster-profile small { font-size: 12px; line-height: 14px; font-weight: 500; }
-.poster-days { width: 193px; height: 74px; padding: 8px 15px; position: absolute; left: 23px; top: 73px; z-index: 3; overflow: hidden; border-radius: 10px; background: var(--brand-deep); color: #fff; box-shadow: inset 0 -6px 2px rgba(188,111,38,.88),inset 0 4px 4px rgba(255,231,179,.32),0 2px 8px rgba(92,58,0,.34); }
+.poster-days { width: 193px; height: 74px; padding: 8px 15px; position: absolute; left: 23px; top: 73px; z-index: 3; overflow: hidden; border-radius: 10px; background: var(--share-brown); color: #fff; box-shadow: inset 0 -6px 2px rgba(188,111,38,.88),inset 0 4px 4px rgba(255,231,179,.32),0 2px 8px rgba(92,58,0,.34); }
 .poster-woodgrain { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
 .poster-woodgrain img { position: absolute; }
 .wood-knot-bottom { width: 23px; height: 28px; left: 59px; top: 62px; }
@@ -417,12 +416,12 @@ img { display: block; }
 .poster-ribbon span { width: 101px; height: 36px; position: absolute; z-index: 2; left: 7px; top: 0; display: grid; place-items: center; border-radius: 0 0 12px 12px; background: var(--orange); box-shadow: inset 0 3px 4px rgba(255,218,162,.44), inset 0 -2px 2px rgba(176,70,1,.44); }
 .poster-ribbon i { width: 6.93px; height: 11.25px; position: absolute; left: 0; top: 0; background: var(--brand-deep); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
 .poster-ribbon i:last-child { right: 0; left: auto; clip-path: polygon(0 0, 100% 100%, 0 100%); }
-.poster-main h2 { margin: 0 0 6px; font-size: 18px; line-height: 25px; }.poster-main p { margin: 0; color: var(--brand-deep); font-size: 12px; line-height: 17px; font-weight: 500; }
+.poster-main h2 { margin: 0 0 6px; font-size: 18px; line-height: 25px; }.poster-main p { margin: 0; color: var(--share-brown); font-size: 12px; line-height: 17px; font-weight: 500; }
 .poster-medal-ring { width: 160px; height: 160px; margin: 9px auto 0; position: relative; display: grid; place-items: center; }
 .poster-ring { width: 184px; height: 184px; position: absolute; left: -12px; top: -12px; }
 .poster-medal { width: 140px; height: 140px; }
 .poster-plant { position: absolute; z-index: 5; bottom: 8px; width: 109px; height: 76px; }
-.poster-plant-left { left: 0; }.poster-plant-right { right: 0; }
+.poster-plant-left { left: -23px; }.poster-plant-right { right: -24px; transform: scaleX(-1); }
 .poster-separator { height: 18px; position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; border-top: 9px solid #f2b00e; background: #a95e21; }
 .share-poster footer { height: 106px; padding: 15px 29px 15px 26px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden; background: var(--share-brown); color: #fff; }
 .share-poster footer > div, .share-poster footer > .poster-qr-frame { position: relative; z-index: 1; }
