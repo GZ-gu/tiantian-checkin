@@ -327,7 +327,8 @@ img { display: block; }
 .success-heading h1 { margin: 0; font-size: 30px; line-height: normal; font-weight: 800; letter-spacing: 0; }
 .success-heading p { margin: 4px 0 0; color: var(--muted); font-size: 14px; line-height: 20px; }
 .confetti-animation { position: absolute; z-index: 5; left: 0; width: 100%; pointer-events: none; object-fit: fill; animation: confetti-overlay 1.8s ease-out forwards; }
-.success-confetti-animation { top: 145px; height: 260px; }
+.success-confetti-animation { width: 100%; height: 310px; position: absolute; z-index: 5; left: 0; top: 112px; overflow: hidden; pointer-events: none; }
+.success-confetti-animation svg { width: 100% !important; height: 100% !important; }
 .success-confetti { position: absolute; z-index: 4; }
 .confetti-blue { width: 8px; height: 8px; left: 303px; top: 92px; }
 .confetti-orange { width: 10px; height: 10px; left: 337px; top: 118px; }
@@ -352,7 +353,6 @@ img { display: block; }
 .milestone-success .success-progress > span { color: var(--orange); }
 .success-stats { width: 357px; height: 120px; padding: 10px 20px 12px; position: absolute; left: 17px; top: 560px; display: grid; grid-template-columns: repeat(3, 1fr); border-radius: 16px; background: #fff; }
 .success-stats div { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; position: relative; }
-.success-stats div + div::before { content: ""; width: 1px; height: 66px; position: absolute; left: -6px; top: 16px; background: var(--line); }
 .success-stats span:not(.success-stat-icon) { height: 20px; color: var(--muted); font-size: 14px; line-height: 20px; }
 .success-stat-icon { width: 40px; height: 40px; padding: 10px; display: grid; place-items: center; border-radius: 50%; }
 .success-stat-icon img { width: 20px; height: 20px; }
@@ -360,7 +360,7 @@ img { display: block; }
 .success-stat-icon.teal { background: #e5faf7; }
 .success-stat-icon.yellow { background: var(--warm); }
 .success-stats strong { margin-top: -2px; display: block; color: var(--green); font-size: 26px; line-height: 28px; }
-.success-stats div:nth-child(2) strong { color: var(--teal); }.success-stats div:nth-child(3) strong { color: #d8a400; }
+.success-stats div:nth-child(2) strong { color: var(--teal); }.success-stats div:nth-child(3) strong { color: var(--brand); }
 .success-stats small { font-size: 16px; }
 .success-next { width: 357px; min-height: 54px; position: absolute; left: 18px; top: 722px; border-radius: 16px; font-size: 18px; line-height: 18px; }
 .success-next img { width: 22px; height: 22px; }
@@ -397,18 +397,20 @@ img { display: block; }
 .poster-profile { position: absolute; z-index: 4; left: 26px; top: 19px; display: flex; align-items: center; gap: 10px; }
 .poster-avatar { width: 44px; height: 44px; padding: 4px; display: block; border-radius: 50%; background: #fff; }
 .poster-avatar img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
-.poster-profile > span:last-child { display: grid; gap: 2px; color: #fff; }
+.poster-profile > span:last-child { display: grid; gap: 2px; color: var(--brand-on-primary); }
 .poster-profile strong { font-size: 16px; line-height: 18px; font-weight: 800; }.poster-profile small { font-size: 12px; line-height: 14px; font-weight: 500; }
 .poster-days { width: 193px; height: 74px; padding: 8px 15px; position: absolute; left: 23px; top: 73px; z-index: 3; overflow: hidden; border-radius: 10px; background: var(--brand-deep); color: #fff; box-shadow: inset 0 -6px 2px rgba(188,111,38,.88),inset 0 4px 4px rgba(255,231,179,.32),0 2px 8px rgba(92,58,0,.34); }
-.poster-woodgrain { position: absolute; inset: 0; z-index: 0; overflow: hidden; opacity: .26; pointer-events: none; }
-.poster-woodgrain i { width: 128px; height: 18px; position: absolute; left: 26px; border: 2px solid #7d431c; border-radius: 50%; transform: rotate(-4deg); }
-.poster-woodgrain i:nth-child(1) { top: 7px; }
-.poster-woodgrain i:nth-child(2) { width: 84px; left: 92px; top: 32px; transform: rotate(3deg); }
-.poster-woodgrain i:nth-child(3) { width: 116px; left: -18px; top: 52px; transform: rotate(5deg); }
+.poster-woodgrain { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.poster-woodgrain img { position: absolute; }
+.wood-knot-bottom { width: 23px; height: 28px; left: 59px; top: 62px; }
+.wood-knot-top { width: 23px; height: 28px; left: 141px; top: -19px; }
+.wood-grain-long { width: 93px; height: 5px; left: -3px; top: 30px; }
+.wood-grain-short { width: 28px; height: 5px; left: -9px; top: 14px; }
+.wood-grain-vertical { width: 28px; height: 10.5px; left: 132px; top: 67.75px; transform: rotate(-90deg); }
 .poster-days small { display: block; color: rgba(255,249,233,.56); font-size: 10px; line-height: 12px; }
 .poster-days > small, .poster-days > span:not(.poster-woodgrain) { position: relative; z-index: 1; }
 .poster-days > span:not(.poster-woodgrain) { margin-top: 8px; display: block; font-size: 18px; line-height: 30px; font-weight: 800; white-space: nowrap; }.poster-days strong { color: #fff018; font-size: 30px; }
-.poster-lion { width: 140px; height: 192px; position: absolute; z-index: 4; left: 176px; top: 22px; object-fit: contain; }
+.poster-lion { width: 140px; height: 192px; position: absolute; z-index: 4; left: 176px; top: 22px; object-fit: cover; transform: scaleX(-1); }
 .poster-main-shell { width: 293px; height: 312px; padding: 10px; position: absolute; z-index: 4; left: 23px; top: 167px; border-radius: 12px 12px 0 0; background: #fff; }
 .poster-main { width: 273px; height: 289px; padding: 29px 12px 10px; position: relative; border-radius: 8px; background: var(--warm); text-align: center; }
 .poster-ribbon { width: 115px; height: 36px; position: absolute; left: 80px; top: -21px; color: #fff; font-size: 16px; line-height: 18px; font-weight: 800; }
@@ -422,7 +424,14 @@ img { display: block; }
 .poster-plant { position: absolute; z-index: 5; bottom: 8px; width: 109px; height: 76px; }
 .poster-plant-left { left: 0; }.poster-plant-right { right: 0; }
 .poster-separator { height: 18px; position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; border-top: 9px solid #f2b00e; background: #a95e21; }
-.share-poster footer { height: 106px; padding: 15px 29px 15px 26px; display: flex; align-items: center; justify-content: space-between; background: var(--share-brown); color: #fff; }
+.share-poster footer { height: 106px; padding: 15px 29px 15px 26px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden; background: var(--share-brown); color: #fff; }
+.share-poster footer > div, .share-poster footer > .poster-qr-frame { position: relative; z-index: 1; }
+.poster-footer-woodgrain { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
+.poster-footer-woodgrain img { position: absolute; }
+.footer-knot-small { width: 24px; height: 24px; left: -12px; top: 40px; }
+.footer-knot-large { width: 39px; height: 29px; left: 211px; top: 94px; }
+.footer-grain-left { width: 154.77px; height: 7px; left: -3px; top: 72px; }
+.footer-grain-right { width: 154.77px; height: 7px; left: 338.77px; top: 40px; }
 .share-poster footer strong { font-size: 20px; line-height: 24px; font-weight: 800; }.share-poster footer p { margin: 7px 0 0; color: #ffe27b; font-size: 14px; line-height: 18px; font-weight: 600; }
 .poster-qr-frame { width: 70px; height: 70px; padding: 2.5px; display: block; border-radius: 6px; background: #fff; }.poster-qr { width: 65px; height: 65px; object-fit: cover; }
 .save-poster-button { width: 357px; min-height: 56px; margin: 0 auto; position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 16px; background: #fff; color: var(--brand-deep); box-shadow: var(--shadow); font-size: 18px; font-weight: 600; }
@@ -438,7 +447,7 @@ img { display: block; }
 @keyframes segment-fill { from { transform: scaleX(.2); opacity: .4; } to { transform: scaleX(1); opacity: 1; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .confetti-animation { display: none; }
+  .confetti-animation, .success-confetti-animation { display: none; }
 }
 
 @media (display-mode: standalone) {
