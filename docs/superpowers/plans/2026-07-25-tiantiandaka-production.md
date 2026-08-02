@@ -1,5 +1,7 @@
 # 天天打卡正式产品返工 Implementation Plan
 
+> 状态：已完成的历史实施计划。当前版本、规则和验收结果分别以 `../../../README.md`、`../../天天打卡_V1.1_PRD.md` 和 `../../天天打卡-产品开发交付文档.md` 为准；本文中的未勾选项不代表当前待办。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** 将现有近似原型返工为严格对齐 Figma、可离线安装和公开分享的正式 V1.1 产品。
