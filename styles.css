@@ -44,7 +44,7 @@ button:active:not(:disabled) { transform: scale(.98); filter: brightness(.98); }
 button:disabled { cursor: default; }
 img { display: block; }
 
-.app-viewport { width: min(100%, 393px); height: 100vh; height: 100dvh; margin: 0 auto; position: relative; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-width: none; background: var(--page); box-shadow: 0 0 30px rgba(31, 35, 41, .12); }
+.app-viewport { width: min(100%, 393px); height: 100vh; height: 100dvh; margin: 0 auto; padding-top: env(safe-area-inset-top); position: relative; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-width: none; background: #fed334; box-shadow: 0 0 30px rgba(31, 35, 41, .12); }
 .app-viewport::-webkit-scrollbar { display: none; }
 .app, .screen { min-height: 100%; }
 .screen { padding-bottom: 86px; background: var(--page); }
@@ -162,7 +162,7 @@ img { display: block; }
 .checkin-button img { width: 18px; height: 18px; }
 .checkin-button.makeup { width: 100px; background: var(--teal-soft); color: var(--teal); }
 
-.bottom-nav { width: 357px; height: 60px; position: fixed; z-index: 30; left: 50%; bottom: calc(26px + env(safe-area-inset-bottom)); transform: translateX(-50%); display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; border-radius: 999px; background: #fff; box-shadow: 0 0 10px rgba(31, 35, 41, .08); }
+.bottom-nav { width: 357px; height: 60px; position: fixed; z-index: 30; left: 50%; bottom: 26px; transform: translateX(-50%); display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; border-radius: 999px; background: #fff; box-shadow: 0 0 10px rgba(31, 35, 41, .08); }
 .nav-button { position: relative; display: grid; grid-template-rows: 30px 10px; place-items: center; align-content: start; padding-top: 3px; gap: 2px; border: 0; background: transparent; color: var(--muted); font-size: 10px; line-height: 10px; }
 .nav-button img { width: 30px; height: 30px; object-fit: contain; }
 .nav-button[data-view="today"] img { width: 20px; height: 20px; margin: 5px; }
