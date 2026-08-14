@@ -2,7 +2,7 @@
 
 面向家庭的轻量学习打卡 PWA。家长创建任务，孩子通过每日打卡、勋章成长和家庭奖励回应获得持续反馈。
 
-当前发布版本为 `1.2.18`，实现 [V1.1 产品规格](./docs/天天打卡_V1.1_PRD.md)。视觉以 [Figma 天天打卡](https://www.figma.com/design/fms7qDu4GjPsyWlEXG5tnh/%E5%A4%A9%E5%A4%A9%E6%89%93%E5%8D%A1?node-id=106-71) 的 13 个主流程画板和首次空首页为准。
+当前发布版本为 `1.2.19`，实现 [V1.1 产品规格](./docs/天天打卡_V1.1_PRD.md)。视觉以 [Figma 天天打卡](https://www.figma.com/design/fms7qDu4GjPsyWlEXG5tnh/%E5%A4%A9%E5%A4%A9%E6%89%93%E5%8D%A1?node-id=106-71) 的 13 个主流程画板和首次空首页为准。
 
 在线体验：https://gz-gu.github.io/tiantian-checkin/
 
@@ -33,7 +33,7 @@ node --test tests/core.test.mjs
 
 ## 文档
 
-- [产品开发交付文档](./docs/天天打卡-产品开发交付文档.md)：`1.2.18` 的现役实现、验收和发布结果。
+- [产品开发交付文档](./docs/天天打卡-产品开发交付文档.md)：`1.2.19` 的现役实现、验收和发布结果。
 - [1.2.15 视觉基线报告](./docs/figma-baseline/视觉验收报告-1.2.15.md)：历史逐页截图和差异基线；不代表当前发布版本。
 - [V1.1 产品规格](./docs/天天打卡_V1.1_PRD.md)：现役业务规则。
 - `docs/archive/`：早期探索文档，仅供追溯，不作为开发依据。

@@ -23,7 +23,7 @@ import {
   getTaskTimeline,
   localDateISO,
   seedDemoState
-} from "./core.mjs?v=1.2.18";
+} from "./core.mjs?v=1.2.19";
 
 const STORAGE_KEY = "tiantian-checkin-v1.2-production";
 const A = "./assets/figma";
@@ -142,21 +142,15 @@ function icon(src, alt = "", className = "") {
 function profileAvatarSrc() {
   return state.profile.avatar?.startsWith("data:image/")
     ? state.profile.avatar
-    : `${A}/profile-avatar.png?v=1.2.18`;
+    : `${A}/profile-avatar.png?v=1.2.19`;
 }
 
 function scrollAppTop() {
   document.querySelector(".app-viewport")?.scrollTo(0, 0);
 }
 
-function statusBar() {
-  const now = new Date();
-  const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}`;
-  return `<div class="status-bar" aria-hidden="true"><time>${time}</time><div class="status-icons"><i class="signal">${[1, 2, 3, 4].map((index) => icon(`${A}/status-signal-${index}.svg`)).join("")}</i><i class="wifi">${[1, 2, 3].map((index) => icon(`${A}/status-wifi-${index}.svg`)).join("")}</i><i class="battery">${icon(`${A}/status-battery-border.svg`)}<b></b>${icon(`${A}/status-battery-cap.svg`)}</i></div></div>`;
-}
-
 function pageHeader(title, backView = "today", className = "") {
-  return `<header class="page-header ${className}">${statusBar()}<div class="page-toolbar"><button class="icon-button" type="button" data-view="${backView}" aria-label="返回">${icon(`${A}/back.svg`)}</button><h1>${title}</h1><span></span></div></header>`;
+  return `<header class="page-header ${className}"><div class="page-toolbar"><button class="icon-button" type="button" data-view="${backView}" aria-label="返回">${icon(`${A}/back.svg`)}</button><h1>${title}</h1><span></span></div></header>`;
 }
 
 function showToast(message) {
@@ -193,7 +187,6 @@ function render() {
   if (ui.success) {
     toastRoot.innerHTML = "";
     app.innerHTML = renderSuccess();
-    updateClock();
     return;
   }
   const views = {
@@ -207,21 +200,13 @@ function render() {
     share: renderShare
   };
   app.innerHTML = (views[ui.view] || renderToday)();
-  updateClock();
   if (ui.modal) renderModal();
   if (ui.view === "share") preparePoster();
 }
 
-function updateClock() {
-  const now = new Date();
-  document.querySelectorAll(".status-bar time").forEach((element) => {
-    element.textContent = `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}`;
-  });
-}
-
 function renderHomeHero() {
   const stats = calculateGlobalStats(state);
-  return `<header class="home-hero" data-figma-node="189:2371">${icon(`${A}/home-wave.svg`, "", "hero-wave")}${icon(`${A}/spark-dot-lg.svg`, "", "spark spark-dot-lg")}${icon(`${A}/spark-dot-sm.svg`, "", "spark spark-dot-sm")}${icon(`${A}/spark-star-lg.svg`, "", "spark spark-star-lg")}${icon(`${A}/spark-star-sm.svg`, "", "spark spark-star-sm")}${statusBar()}<div class="hero-art" data-figma-node="189:2377">${icon(`${A}/lion-home.png`, "小狮子")}</div><div class="hero-copy" data-figma-node="189:2378"><h1>你好，${escapeHtml(state.profile.nickname)}！</h1><div class="day-chip">进步第 <strong>${stats.cumulativeLabel}</strong> 天${icon(`${A}/bolt.svg`)}</div><p>每天进步一点点，攒成孩子看得到的小勋章。</p></div></header>`;
+  return `<header class="home-hero" data-figma-node="189:2371">${icon(`${A}/home-wave.svg`, "", "hero-wave")}${icon(`${A}/spark-dot-lg.svg`, "", "spark spark-dot-lg")}${icon(`${A}/spark-dot-sm.svg`, "", "spark spark-dot-sm")}${icon(`${A}/spark-star-lg.svg`, "", "spark spark-star-lg")}${icon(`${A}/spark-star-sm.svg`, "", "spark spark-star-sm")}<div class="hero-art" data-figma-node="189:2377">${icon(`${A}/lion-home.png`, "小狮子")}</div><div class="hero-copy" data-figma-node="189:2378"><h1>你好，${escapeHtml(state.profile.nickname)}！</h1><div class="day-chip">进步第 <strong>${stats.cumulativeLabel}</strong> 天${icon(`${A}/bolt.svg`)}</div><p>每天进步一点点，攒成孩子看得到的小勋章。</p></div></header>`;
 }
 
 function getWeekDates(selectedDate = ui.selectedDate) {
@@ -316,7 +301,7 @@ function renderTaskCard(task, date) {
 }
 
 function renderPublishHero(taskCount) {
-  return `<header class="publish-hero">${icon(`${A}/home-wave.svg`, "", "hero-wave")}${icon(`${A}/spark-dot-lg.svg`, "", "spark spark-dot-lg")}${icon(`${A}/spark-dot-sm.svg`, "", "spark spark-dot-sm")}${icon(`${A}/spark-star-lg.svg`, "", "spark spark-star-lg")}${icon(`${A}/spark-star-sm.svg`, "", "spark spark-star-sm")}${statusBar()}${icon(`${A}/lion-publish.png`, "小狮子", "publish-lion")}<div class="publish-copy"><h1>发布任务</h1><span>已发布 <strong>${taskCount}</strong> 个${icon(`${A}/bolt.svg`)}</span><p>每天进步一点点，攒成孩子看得到的小勋章。</p></div></header>`;
+  return `<header class="publish-hero">${icon(`${A}/home-wave.svg`, "", "hero-wave")}${icon(`${A}/spark-dot-lg.svg`, "", "spark spark-dot-lg")}${icon(`${A}/spark-dot-sm.svg`, "", "spark spark-dot-sm")}${icon(`${A}/spark-star-lg.svg`, "", "spark spark-star-lg")}${icon(`${A}/spark-star-sm.svg`, "", "spark spark-star-sm")}${icon(`${A}/lion-publish.png`, "小狮子", "publish-lion")}<div class="publish-copy"><h1>发布任务</h1><span>已发布 <strong>${taskCount}</strong> 个${icon(`${A}/bolt.svg`)}</span><p>每天进步一点点，攒成孩子看得到的小勋章。</p></div></header>`;
 }
 
 function taskFields(task = null) {
@@ -356,7 +341,7 @@ function milestoneSummary(milestone) {
 
 function renderBadges() {
   const stats = calculateGlobalStats(state);
-  return `<section class="screen badges-screen"><header class="badges-hero">${icon(`${A}/home-wave.svg`, "", "badges-wave")}${statusBar()}<button class="profile-link" type="button" data-view="profile">${icon(profileAvatarSrc(), "头像")}<span><strong>${escapeHtml(state.profile.nickname)}</strong><small>${icon(`${A}/edit-name.svg`)}编辑信息</small></span></button>${icon(`${A}/lion-badges.png?v=1.2.18`, "小狮子", "badges-lion")}</header><div class="badge-stats"><div><span>坚持打卡</span><strong>${stats.cumulativeLabel}<small> 天</small></strong></div><div><span>完成任务</span><strong>${state.tasks.filter((task) => ["completed", "archived"].includes(task.status)).length}<small> 个</small></strong></div><div><span>获得勋章</span><strong>${totalUnlockedBadges(state)}<small> 枚</small></strong></div></div><h2 class="medal-wall-title">勋章墙</h2><div class="medal-list">${MILESTONES.map((milestone) => { const summary = milestoneSummary(milestone); return `<article class="medal-card">${medalMarkup(milestone, summary.fill)}<div><h3>${milestone.name}勋章</h3><p>累计获得 <strong>${summary.earned}</strong> 次</p></div></article>`; }).join("")}</div>${navMarkup("badges")}</section>`;
+  return `<section class="screen badges-screen"><header class="badges-hero">${icon(`${A}/home-wave.svg`, "", "badges-wave")}<button class="profile-link" type="button" data-view="profile">${icon(profileAvatarSrc(), "头像")}<span><strong>${escapeHtml(state.profile.nickname)}</strong><small>${icon(`${A}/edit-name.svg`)}编辑信息</small></span></button>${icon(`${A}/lion-badges.png?v=1.2.19`, "小狮子", "badges-lion")}</header><div class="badge-stats"><div><span>坚持打卡</span><strong>${stats.cumulativeLabel}<small> 天</small></strong></div><div><span>完成任务</span><strong>${state.tasks.filter((task) => ["completed", "archived"].includes(task.status)).length}<small> 个</small></strong></div><div><span>获得勋章</span><strong>${totalUnlockedBadges(state)}<small> 枚</small></strong></div></div><h2 class="medal-wall-title">勋章墙</h2><div class="medal-list">${MILESTONES.map((milestone) => { const summary = milestoneSummary(milestone); return `<article class="medal-card">${medalMarkup(milestone, summary.fill)}<div><h3>${milestone.name}勋章</h3><p>累计获得 <strong>${summary.earned}</strong> 次</p></div></article>`; }).join("")}</div>${navMarkup("badges")}</section>`;
 }
 
 function renderProfile() {
@@ -409,7 +394,7 @@ function renderSuccess() {
   const count = countTaskCheckIns(state, task.id);
   const segments = Array.from({ length: progress.segmentTarget }, (_, index) => `<i class="${index < progress.segmentDone ? "done" : ""}"></i>`).join("");
   const staticConfetti = ["blue", "orange", "mint", "pink", "yellow", "star"].map((name) => icon(`${A}/confetti-${name}.svg`, "", `success-confetti confetti-${name}`)).join("");
-  return `<section class="success-screen ${isMilestone ? "milestone-success" : "standard-success"}">${statusBar()}<button class="success-close" type="button" data-action="close-success" aria-label="返回">${icon(`${A}/back.svg`)}</button><div class="success-heading">${icon(`${A}/lion-success.png?v=1.2.18`, "小狮子")}<div><h1>打卡成功!</h1><p>今天的努力已经记录下来了</p></div></div>${staticConfetti}${icon(`${A}/confetti.svg`, "", "confetti-animation success-confetti-animation")}<div class="celebration"><div class="success-medal-ring">${icon(`${A}/success-outer-ring.svg`, "", "success-outer-ring")}<div class="success-medal-core">${icon(`${A}/success-inner-ring.svg`, "", "success-inner-ring")}${medalMarkup(milestone, progress.fill, "success-medal")}</div></div></div><article class="success-progress"><h2>${milestone.name}</h2><p>勋章注入 <strong>${progress.segmentDone}</strong> 格 · 当前 ${progress.segmentDone}/${progress.segmentTarget}</p><div class="success-bar">${segments}</div><span>${isMilestone ? `恭喜你，成功获得${milestone.name}勋章！` : `再完成 ${Math.max(progress.segmentTarget - progress.segmentDone, 0)} 天即可点亮勋章`}</span></article><div class="success-stats"><div><span class="success-stat-icon green">${icon(`${A}/success-stat-streak.svg`)}</span><span>连续坚持</span><strong>${calculateGlobalStats(state).streakDays}<small> 天</small></strong></div><div><span class="success-stat-icon teal">${icon(`${A}/success-stat-week.svg`)}</span><span>本周完成</span><strong>${getWeekDates().filter((date) => state.checkIns.some((item) => item.status === "active" && item.date === date && item.taskId === task.id)).length}<small> 天</small></strong></div><div><span class="success-stat-icon yellow">${icon(`${A}/success-stat-target.svg`)}</span><span>距离目标</span><strong>${Math.max(task.targetDays - count, 0)}<small> 天</small></strong></div></div>${ui.success.final ? `<button class="primary-button success-next" type="button" data-action="open-reward" data-task-id="${task.id}">回应约定奖励</button>` : `<button class="primary-button success-next" type="button" data-action="share" data-task-id="${task.id}">${icon(`${A}/share-success.svg`)}<span>生成分享卡</span></button>`}<button class="plain-button success-return" type="button" data-action="close-success">返回今日任务</button></section>`;
+  return `<section class="success-screen ${isMilestone ? "milestone-success" : "standard-success"}"><button class="success-close" type="button" data-action="close-success" aria-label="返回">${icon(`${A}/back.svg`)}</button><div class="success-heading">${icon(`${A}/lion-success.png?v=1.2.19`, "小狮子")}<div><h1>打卡成功!</h1><p>今天的努力已经记录下来了</p></div></div>${staticConfetti}${icon(`${A}/confetti.svg`, "", "confetti-animation success-confetti-animation")}<div class="celebration"><div class="success-medal-ring">${icon(`${A}/success-outer-ring.svg`, "", "success-outer-ring")}<div class="success-medal-core">${icon(`${A}/success-inner-ring.svg`, "", "success-inner-ring")}${medalMarkup(milestone, progress.fill, "success-medal")}</div></div></div><article class="success-progress"><h2>${milestone.name}</h2><p>勋章注入 <strong>${progress.segmentDone}</strong> 格 · 当前 ${progress.segmentDone}/${progress.segmentTarget}</p><div class="success-bar">${segments}</div><span>${isMilestone ? `恭喜你，成功获得${milestone.name}勋章！` : `再完成 ${Math.max(progress.segmentTarget - progress.segmentDone, 0)} 天即可点亮勋章`}</span></article><div class="success-stats"><div><span class="success-stat-icon green">${icon(`${A}/success-stat-streak.svg`)}</span><span>连续坚持</span><strong>${calculateGlobalStats(state).streakDays}<small> 天</small></strong></div><div><span class="success-stat-icon teal">${icon(`${A}/success-stat-week.svg`)}</span><span>本周完成</span><strong>${getWeekDates().filter((date) => state.checkIns.some((item) => item.status === "active" && item.date === date && item.taskId === task.id)).length}<small> 天</small></strong></div><div><span class="success-stat-icon yellow">${icon(`${A}/success-stat-target.svg`)}</span><span>距离目标</span><strong>${Math.max(task.targetDays - count, 0)}<small> 天</small></strong></div></div>${ui.success.final ? `<button class="primary-button success-next" type="button" data-action="open-reward" data-task-id="${task.id}">回应约定奖励</button>` : `<button class="primary-button success-next" type="button" data-action="share" data-task-id="${task.id}">${icon(`${A}/share-success.svg`)}<span>生成分享卡</span></button>`}<button class="plain-button success-return" type="button" data-action="close-success">返回今日任务</button></section>`;
 }
 
 function renderReward() {
@@ -419,7 +404,7 @@ function renderReward() {
     return renderToday();
   }
   const milestone = getMilestonesForTask(task).at(-1);
-  return `<section class="reward-screen">${statusBar()}<button class="reward-close" type="button" data-view="today" aria-label="关闭">${icon(`${A}/close.svg`)}</button><div class="reward-celebration">${icon(`${A}/confetti.svg`, "", "confetti-animation reward-confetti-animation")}${medalMarkup(milestone, 1, "reward-medal")}<span>${task.targetDays}天里程碑</span><h1>恭喜你打成目标！</h1><p>连续完成 ${task.targetDays} 天，每一次坚持都算数</p></div><main class="reward-body"><article class="reward-card"><div class="reward-heading"><span>${icon(`${A}/gift.svg`)}</span><div><small>家长约定奖励</small><strong>${escapeHtml(task.rewardText || "一次认真表扬")}</strong></div></div><div class="reward-note"><strong>家长，请认真回应孩子的这次坚持</strong><p>奖励不是交换，是让努力被看见</p></div></article><button class="primary-button" type="button" data-action="redeem" data-task-id="${task.id}">${icon(`${A}/reward-success.svg`)}<span>确认奖励已兑现</span></button><button class="primary-button" type="button" data-action="share" data-task-id="${task.id}">${icon(`${A}/share-success.svg`)}<span>生成分享卡</span></button><button class="plain-button" type="button" data-view="today">稍后处理</button></main></section>`;
+  return `<section class="reward-screen"><button class="reward-close" type="button" data-view="today" aria-label="关闭">${icon(`${A}/close.svg`)}</button><div class="reward-celebration">${icon(`${A}/confetti.svg`, "", "confetti-animation reward-confetti-animation")}${medalMarkup(milestone, 1, "reward-medal")}<span>${task.targetDays}天里程碑</span><h1>恭喜你打成目标！</h1><p>连续完成 ${task.targetDays} 天，每一次坚持都算数</p></div><main class="reward-body"><article class="reward-card"><div class="reward-heading"><span>${icon(`${A}/gift.svg`)}</span><div><small>家长约定奖励</small><strong>${escapeHtml(task.rewardText || "一次认真表扬")}</strong></div></div><div class="reward-note"><strong>家长，请认真回应孩子的这次坚持</strong><p>奖励不是交换，是让努力被看见</p></div></article><button class="primary-button" type="button" data-action="redeem" data-task-id="${task.id}">${icon(`${A}/reward-success.svg`)}<span>确认奖励已兑现</span></button><button class="primary-button" type="button" data-action="share" data-task-id="${task.id}">${icon(`${A}/share-success.svg`)}<span>生成分享卡</span></button><button class="plain-button" type="button" data-view="today">稍后处理</button></main></section>`;
 }
 
 function renderShare() {
@@ -432,7 +417,7 @@ function renderShare() {
   const progress = getCurrentMilestone(state, task);
   const plaqueWood = `<span class="poster-woodgrain">${icon(`${A}/poster-wood-knot.svg`, "", "wood-knot-bottom")}${icon(`${A}/poster-wood-knot.svg`, "", "wood-knot-top")}${icon(`${A}/poster-wood-long.svg`, "", "wood-grain-long")}${icon(`${A}/poster-wood-short.svg`, "", "wood-grain-short")}${icon(`${A}/poster-wood-vertical.svg`, "", "wood-grain-vertical")}</span>`;
   const footerWood = `<span class="poster-footer-woodgrain">${icon(`${A}/poster-footer-knot-small.svg`, "", "footer-knot-small")}${icon(`${A}/poster-footer-knot-large.svg`, "", "footer-knot-large")}${icon(`${A}/poster-footer-grain-left.svg`, "", "footer-grain-left")}${icon(`${A}/poster-footer-grain-right.svg`, "", "footer-grain-right")}</span>`;
-  return `<section class="share-screen">${pageHeader("分享", ui.returnView, "transparent")}<div id="sharePoster" class="share-poster"><div class="poster-top"><div class="poster-profile"><span class="poster-avatar">${icon(profileAvatarSrc(), "头像")}</span><span><strong>${escapeHtml(state.profile.nickname)}</strong><small>在天天打卡进步</small></span></div><div class="poster-days">${plaqueWood}<small>天 / 天 / 打 / 卡 / 天 / 天 / 进 / 步</small><span>坚持学习 <strong>${stats.cumulativeLabel}</strong> 天</span></div>${icon(`${A}/poster-lion.png?v=1.2.18`, "小狮子", "poster-lion")}<div class="poster-main-shell"><div class="poster-main"><div class="poster-ribbon"><i></i><span>今日完成</span><i></i></div><h2>${escapeHtml(task.title)}</h2><p>目标打卡${task.targetDays}天&nbsp;&nbsp;已完成打卡${countTaskCheckIns(state, task.id)}天</p><div class="poster-medal-ring">${icon(`${A}/poster-medal-ring.svg`, "", "poster-ring")}${medalMarkup(progress, progress.fill, "poster-medal")}</div></div></div>${icon(`${A}/poster-plant-left.svg`, "", "poster-plant poster-plant-left")}${icon(`${A}/poster-plant-right.svg`, "", "poster-plant poster-plant-right")}<div class="poster-separator"></div></div><footer>${footerWood}<div><strong>天天打卡&nbsp; 天天进步</strong><p>长按识别二维码，申请体验</p></div><span class="poster-qr-frame">${icon(`${A}/qr-code.png`, "体验二维码", "poster-qr")}</span></footer></div><button class="save-poster-button" type="button" data-action="save-poster" disabled>${icon(`${A}/poster-save.svg`)}<span>保存海报至相册</span></button></section>`;
+  return `<section class="share-screen">${pageHeader("分享", ui.returnView, "transparent")}<div id="sharePoster" class="share-poster"><div class="poster-top"><div class="poster-profile"><span class="poster-avatar">${icon(profileAvatarSrc(), "头像")}</span><span><strong>${escapeHtml(state.profile.nickname)}</strong><small>在天天打卡进步</small></span></div><div class="poster-days">${plaqueWood}<small>天 / 天 / 打 / 卡 / 天 / 天 / 进 / 步</small><span>坚持学习 <strong>${stats.cumulativeLabel}</strong> 天</span></div>${icon(`${A}/poster-lion.png?v=1.2.19`, "小狮子", "poster-lion")}<div class="poster-main-shell"><div class="poster-main"><div class="poster-ribbon"><i></i><span>今日完成</span><i></i></div><h2>${escapeHtml(task.title)}</h2><p>目标打卡${task.targetDays}天&nbsp;&nbsp;已完成打卡${countTaskCheckIns(state, task.id)}天</p><div class="poster-medal-ring">${icon(`${A}/poster-medal-ring.svg`, "", "poster-ring")}${medalMarkup(progress, progress.fill, "poster-medal")}</div></div></div>${icon(`${A}/poster-plant-left.svg`, "", "poster-plant poster-plant-left")}${icon(`${A}/poster-plant-right.svg`, "", "poster-plant poster-plant-right")}<div class="poster-separator"></div></div><footer>${footerWood}<div><strong>天天打卡&nbsp; 天天进步</strong><p>长按识别二维码，申请体验</p></div><span class="poster-qr-frame">${icon(`${A}/qr-code.png`, "体验二维码", "poster-qr")}</span></footer></div><button class="save-poster-button" type="button" data-action="save-poster" disabled>${icon(`${A}/poster-save.svg`)}<span>保存海报至相册</span></button></section>`;
 }
 
 function renderModal() {
@@ -440,12 +425,12 @@ function renderModal() {
   let body = "";
   if (modal.type === "checkin") {
     const task = getTask(state, modal.taskId);
-    body = `${icon(`${A}/modal-lion.png`, "小狮子", "sheet-lion")}<h2>今天完成了吗？</h2><strong class="sheet-task">${escapeHtml(task.title)}</strong><div class="sheet-notice">${icon(`${A}/modal-success.svg`)}<span>确认后，${getCurrentMilestone(state, task).name}勋章将变为 ${getCurrentMilestone(state, task).segmentDone + 1}/${getCurrentMilestone(state, task).segmentTarget}</span></div><button class="primary-button" data-action="confirm-checkin" data-task-id="${task.id}" type="button">确认完成</button><button class="plain-button" data-action="close-modal" type="button">再等等</button>`;
+    body = `${icon(`${A}/modal-lion.png?v=1.2.19`, "小狮子", "sheet-lion")}<h2>今天完成了吗？</h2><strong class="sheet-task">${escapeHtml(task.title)}</strong><div class="sheet-notice">${icon(`${A}/modal-success.svg`)}<span>确认后，${getCurrentMilestone(state, task).name}勋章将变为 ${getCurrentMilestone(state, task).segmentDone + 1}/${getCurrentMilestone(state, task).segmentTarget}</span></div><button class="primary-button" data-action="confirm-checkin" data-task-id="${task.id}" type="button">确认完成</button><button class="plain-button" data-action="close-modal" type="button">再等等</button>`;
   } else if (modal.type === "makeup" || modal.type === "revoke") {
     const makeup = modal.type === "makeup";
-    body = `${icon(`${A}/modal-lion.png`, "小狮子", "sheet-lion")}<h2>${makeup ? "请说明补卡情况" : "请说明撤销情况"}</h2><form id="${makeup ? "makeupForm" : "revokeForm"}">${makeup && !modal.date ? `<div class="field"><label for="makeupDate">补卡日期</label><input class="field-control" id="makeupDate" name="date" type="date" max="${previousDate()}" required></div>` : makeup ? `<input type="hidden" name="date" value="${modal.date}"><p class="fixed-date">补卡日期：${formatDate(modal.date, true)}</p>` : ""}<div class="field"><textarea class="reason-control" id="reason" name="reason" maxlength="100" placeholder="请输入内容"></textarea><div class="field-meta"><span data-error="reason"></span><span data-count="reason">0/100</span></div></div><button class="primary-button" type="submit">确认完成</button><button class="plain-button" type="button" data-action="close-modal">再等等</button></form>`;
+    body = `${icon(`${A}/modal-lion.png?v=1.2.19`, "小狮子", "sheet-lion")}<h2>${makeup ? "请说明补卡情况" : "请说明撤销情况"}</h2><form id="${makeup ? "makeupForm" : "revokeForm"}">${makeup && !modal.date ? `<div class="field"><label for="makeupDate">补卡日期</label><input class="field-control" id="makeupDate" name="date" type="date" max="${previousDate()}" required></div>` : makeup ? `<input type="hidden" name="date" value="${modal.date}"><p class="fixed-date">补卡日期：${formatDate(modal.date, true)}</p>` : ""}<div class="field"><textarea class="reason-control" id="reason" name="reason" maxlength="100" placeholder="请输入内容"></textarea><div class="field-meta"><span data-error="reason"></span><span data-count="reason">0/100</span></div></div><button class="primary-button" type="submit">确认完成</button><button class="plain-button" type="button" data-action="close-modal">再等等</button></form>`;
   } else if (modal.type === "confirm") {
-    body = `${icon(`${A}/modal-lion.png`, "小狮子", "sheet-lion")}<h2>${escapeHtml(modal.title)}</h2><p class="confirm-message">${escapeHtml(modal.message)}</p><button class="primary-button" type="button" data-action="confirm-pending">确认</button><button class="plain-button" type="button" data-action="close-modal">取消</button>`;
+    body = `${icon(`${A}/modal-lion.png?v=1.2.19`, "小狮子", "sheet-lion")}<h2>${escapeHtml(modal.title)}</h2><p class="confirm-message">${escapeHtml(modal.message)}</p><button class="primary-button" type="button" data-action="confirm-pending">确认</button><button class="plain-button" type="button" data-action="close-modal">取消</button>`;
   }
   modalRoot.innerHTML = `<div class="modal-scrim"><section class="bottom-sheet modal-${modal.type}" role="dialog" aria-modal="true" aria-label="${escapeHtml(modal.title || modal.type)}"><div class="drag-handle"></div>${body}</section></div>`;
 }
@@ -727,5 +712,4 @@ window.__tiantian = {
   storageKey: STORAGE_KEY
 };
 
-setInterval(updateClock, 30000);
 render();
